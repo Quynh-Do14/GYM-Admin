@@ -32,7 +32,7 @@ export const numberToAlphabet = (number) => {
 export const convertDate = (date) => {
     if (date) {
         let dateFormat = new Date(date);
-        return moment(dateFormat).format("hh:mm - DD/MM/YYYY");
+        return moment(dateFormat).format("DD-MM-YYYY hh:mm:ss");
     } return null;
 
 };
@@ -49,6 +49,14 @@ export const convertTimeOnly = (date) => {
         return moment(dateFormat).format("hh:mm");
     } return null;
 };
+
+export const reverseConvertDate = (inputDateString) => {
+    const inputDate = new Date(inputDateString);
+
+    // Format the date as "Thu, 26 Oct 2023 13:05:32 GMT"
+    const formattedDate = inputDate.toUTCString();
+    return formattedDate
+}
 
 // export const showImage = (img) => {
 //     if (img) {
@@ -124,6 +132,15 @@ export const checkPublishExam = (startDate, endDate) => {
     }
     else {
         return false
+    }
+}
+
+export const genderConfig = (gender) => {
+    if (gender) {
+        return 'Nam';
+    }
+    else {
+        return "Nữ"
     }
 }
 // export const configResultType = (type) => {

@@ -1,70 +1,65 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react';
-import { Button, Col, Row, Upload } from 'antd';
-import { MessageError } from '../controls/MessageError';
-import '../../../../assets/styles/components/input.css'
-
-import { showImageCommon } from '../../../utils/helper';
-import noImgProduct from "../../../../assets/images/no-avatar-product.jpg"
-import noVideoProduct from "../../../../assets/images/noVideo.png"
-
-const UploadFileCommon = (props) => {
-    const {
-        label,
-        isVideo = false,
-        dataAttribute,
-        id,
-        shape = ""
-    } = props;
-    const [value, setValue] = useState("");
-    const [file, setFile] = useState()
-
-    useEffect(() => {
-        setValue(dataAttribute || '');
-
-    }, [dataAttribute]);
-
-    const handleFileChange = async (event) => {
-        const file = event.target.files[0].name;
-        console.log("file", event.target.files[0]);
-        setFile(file)
-    };
-    return (
-        <div>
-            <div className='mb-4 input-common'>
-                <div className='title'>
-                    <span className='label'>{isVideo && label}</span>
-                </div>
-                <div className="avatar-upload">
-                    <div className="avatar-edit">
-                        <input type='file' id={id} onChange={handleFileChange} accept={`${isVideo ? "video/mp4" : ".png, .jpg, .jpeg"}`} />
-                        <label for={id}></label>
-                    </div>
-                    <div className={`avatar-preview ${shape}`}>
-                        {
-                            file
-                                ?
-                                <div className='flex justify-center align-center'>
-                                    <div style={{
-                                        textAlign: "center",
-                                        color: "#fe7524",
-                                        fontSize: "14px",
-                                        lineHeight: "22px",
-                                        fontWeight: 600
-
-                                    }}>
-                                        {file}
-                                    </div>
-                                </div>
-                                :
-                                <div id="imagePreview" style={{ backgroundImage: `${dataAttribute ? `url(${showImageCommon(dataAttribute)})` : `url(${isVideo ? noVideoProduct : noImgProduct})`}` }}>
-                                </div>
-                        }
-
-                    </div>
-                </div>
-            </div>
-        </div >
-    )
+import { Upload } from 'antd';
+import { useEffect, useRef } from 'react';
+import { PlusOutlined } from '@ant-design/icons';
+import noAvatar from "../../../../assets/images/no-avatar-product.jpg"
+const getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
 };
-export default UploadFileCommon;
+function UploadAvatar(props) {
+    const { attributeImg, setAvatar, imageUrl, setImageUrl } = props;
+    const inputRef = useRef(null);
+    const handleChange = (info) => {
+        if (info.file) {
+            getBase64(info.file, (url) => {
+                console.log("info.file", info.file);
+                setImageUrl(url);
+                setAvatar(info.file);
+            });
+        }
+    };
+    useEffect(() => {
+        setImageUrl(attributeImg)
+    }, [attributeImg])
+    return (
+        <div className="mb-[1rem] upload-common">
+            <div className='m-auto'>
+                <label
+                    className='cursor-pointer absolute w-12 h-12 text-center border border-[#4f4d4d] z-10 bg-[#FFFFFF] rounded-full p-2'
+                    htmlFor="upload"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <g data-name="Layer 2">
+                            <g data-name="image">
+                                <rect width="24" height="24" opacity="0" />
+                                <path d="M18 3H6a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3zM6 5h12a1 1 0 0 1 1 1v8.36l-3.2-2.73a2.77 2.77 0 0 0-3.52 0L5 17.7V6a1 1 0 0 1 1-1zm12 14H6.56l7-5.84a.78.78 0 0 1 .93 0L19 17v1a1 1 0 0 1-1 1z" />
+                                <circle cx="8" cy="8.5" r="1.5" />
+                            </g>
+                        </g>
+                    </svg>
+                </label>
+                <Upload
+                    name="avatar"
+                    listType="picture-circle"
+                    className="avatar-uploader flex justify-center"
+                    showUploadList={false}
+                    beforeUpload={() => false}
+                    onChange={handleChange}
+                    id='upload'
+                >
+
+                    {imageUrl ? (
+                        <img src={imageUrl} alt="avatar" className="w-full h-full rounded-full" />
+                    ) : (
+                        <div ref={inputRef}>
+                            <PlusOutlined />
+                        </div>
+                    )}
+                </Upload>
+            </div>
+        </div>
+    );
+}
+
+export default UploadAvatar;

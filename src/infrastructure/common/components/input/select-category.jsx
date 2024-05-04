@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row, Select } from "antd";
-import { validateFields } from '../../../utils/helper';
-import { MessageError } from '../controls/MessageError';
-import '../../../../assets/css/common/input.css'
-import { useRecoilValue } from "recoil";
-import { CategoryState } from "../../../../core/common/atoms/category/categoryState";
-const InputSelectCategoryCommon = (props) => {
+import { Select } from "antd";
+import Constants from "../../../../core/common/constant";
+import { MessageError } from "../controls/MessageError";
+import { validateFields } from "../../../helper/helper";
+
+const InputSelectGenderCommon = (props) => {
     const {
         dataAttribute,
         setData,
@@ -17,7 +16,7 @@ const InputSelectCategoryCommon = (props) => {
         isRequired,
         label
     } = props;
-    const dataCategory = useRecoilValue(CategoryState);
+
     const [value, setValue] = useState("");
 
     const onChange = async (val) => {
@@ -29,7 +28,7 @@ const InputSelectCategoryCommon = (props) => {
 
     let labelLower = label.toLowerCase();
     const validateBlur = (isImplicitChange = false) => {
-        validateFields(isImplicitChange, attribute, !value, setValidate, validate, !value ? `Vui lòng nhập đúng định dạng ${labelLower}` : "");
+        validateFields(isImplicitChange, attribute, !value, setValidate, validate, !value ? `Vui lòng nhập ${labelLower}` : "");
     };
 
     const onBlur = () => {
@@ -64,24 +63,24 @@ const InputSelectCategoryCommon = (props) => {
                             showSearch
                             allowClear={false}
                             showArrow
-                            className="w-100"
+                            className="w-full text-left"
                             disabled={disabled}
                             value={value}
                             listHeight={120}
                             onChange={onChange}
-                            onBlur={onBlur}
+                            onBlur={() => onBlur(false)}
                             placeholder={`Chọn ${label}`}
                             getPopupContainer={trigger => trigger.parentNode}
                         >
                             {
-                                dataCategory && dataCategory.length && dataCategory.map((item, index) => {
+                                Constants.Gender.List.map((item, index) => {
                                     return (
                                         <Select.Option
                                             key={index}
-                                            value={item.idDanhMucDiaDiem}
-                                            title={item.tenDanhMuc}
+                                            value={item.value}
+                                            title={item.label}
                                         >
-                                            {item.tenDanhMuc}
+                                            {item.label}
                                         </Select.Option>
                                     )
                                 })
@@ -94,4 +93,4 @@ const InputSelectCategoryCommon = (props) => {
         </div>
     );
 }
-export default InputSelectCategoryCommon;
+export default InputSelectGenderCommon;

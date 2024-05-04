@@ -1,5 +1,5 @@
 import { Endpoint } from "../../../../core/common/apiLink";
-import { SuccessMessage } from "../../../common/components/toast/notificationToast";
+import { FailMessage, SuccessMessage } from "../../../common/components/toast/notificationToast";
 import { RequestService } from "../../../utils/response";
 import { saveToken } from "../../../utils/storage";
 
@@ -12,12 +12,13 @@ class AuthService {
                     ...data
                 })
                 .then(response => {
-                    if (response.accessToken) {
-                        saveToken({
-                            accessToken: response.accessToken,
-                            refreshToken: response.refreshToken,
-                            userId: response.id
-                        });
+                    if (response) {
+                        // saveToken({
+                        //     accessToken: response.accessToken,
+                        //     refreshToken: response.refreshToken,
+                        //     userId: response.id
+                        // });
+                        saveToken(response.token)
                     }
                     setLoading(false)
                     SuccessMessage("Đăng nhập thành công", "")
@@ -31,7 +32,7 @@ class AuthService {
             //     FailMessage(messageConfig(error.response.data.message), "")
             // }
             // else {
-            //     FailMessage("Đăng nhập không thành công", "Tài khoản của bạn chưa đúng")
+            FailMessage("Đăng nhập không thành công", "Tài khoản của bạn chưa đúng")
             // }
             console.error(error)
         } finally {

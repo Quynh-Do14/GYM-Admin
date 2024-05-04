@@ -87,3 +87,14 @@
     border: 1px solid #e3e3e3;
     padding: 30px 20px;
 }
+
+.ant-upload {
+    background-color: white;
+    border-radius: 50%;
+    border: 3px solid #094174;
+}
+
+.upload-common .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select {
+    width: 180px;
+    height: 180px;
+}

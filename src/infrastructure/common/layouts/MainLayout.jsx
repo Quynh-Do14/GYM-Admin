@@ -1,5 +1,5 @@
 import { Col, Dropdown, Layout, Menu, Row, Space } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BreadcrumbCommon } from './Breabcumb';
 import { DoubleLeftOutlined, DoubleRightOutlined } from '@ant-design/icons';
 import Constants from '../../../core/common/constant';
@@ -9,13 +9,23 @@ import DialogConfirmCommon from '../components/modal/dialogConfirm';
 import { ROUTE_PATH } from '../../../core/common/appRouter';
 import authService from '../../repositories/auth/service/auth.service';
 import { useNavigate, useLocation } from 'react-router-dom';
+import positionService from '../../repositories/position/service/position.service';
+import { useRecoilState } from 'recoil';
+import { PositionState } from '../../../core/atoms/position/positionState';
+import { MemberCardState } from '../../../core/atoms/memberCard/memberCardState';
+import memberCardService from '../../repositories/memberCard/service/memberCard.service';
 
 const { Header, Content, Sider } = Layout;
 
 const MainLayout = ({ ...props }) => {
     const { pageName, title, breadcrumb, redirect } = props
     const [isOpenModalLogout, setIsOpenModalLogout] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
+
     const [loading, setLoading] = useState(false);
+    const [, setDataPosition] = useRecoilState(PositionState);
+    const [, setDataMemberCard] = useRecoilState(MemberCardState);
+
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -41,7 +51,42 @@ const MainLayout = ({ ...props }) => {
         }
     }
 
-    const [collapsed, setCollapsed] = useState(false);
+
+    const onGetPositionAsync = async () => {
+        const param = {}
+        try {
+            await positionService.getPosition(
+                param,
+                setLoading
+            ).then((res) => {
+                setDataPosition(res)
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        onGetPositionAsync().then(_ => { });
+    }, []);
+
+    const onGetMemberCardAsync = async () => {
+        const param = {}
+        try {
+            await memberCardService.getMemberCard(
+                param,
+                setLoading
+            ).then((res) => {
+                setDataMemberCard(res.content)
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        onGetMemberCardAsync().then(_ => { });
+    }, []);
     const listAction = () => {
         return (
             <Menu className='action-admin'>

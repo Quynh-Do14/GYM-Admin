@@ -6,7 +6,12 @@ export default class Constants {
         static List = [
             {
                 label: "Quản lý nhân viên",
-                link: ROUTE_PATH.EMPOYEE,
+                link: ROUTE_PATH.EMPLOYEE,
+                icon: <UserOutlined />
+            },
+            {
+                label: "Quản lý chức vụ",
+                link: ROUTE_PATH.POSITION,
                 icon: <UserOutlined />
             },
             {
@@ -20,8 +25,23 @@ export default class Constants {
                 icon: <DatabaseOutlined />
             },
             {
+                label: "Quản lý thẻ thành viên",
+                link: ROUTE_PATH.MEMBER_CARD,
+                icon: <ScheduleOutlined />
+            },
+            {
+                label: "Quản lý thành viên",
+                link: ROUTE_PATH.MEMBER,
+                icon: <ScheduleOutlined />
+            },
+            {
+                label: "Quản lý loại thiết bị",
+                link: ROUTE_PATH.EQUIP_TYPE,
+                icon: <EnvironmentOutlined />
+            },
+            {
                 label: "Quản lý thiết bị",
-                link: ROUTE_PATH.DESTINATION,
+                link: ROUTE_PATH.EQUIPMENT,
                 icon: <EnvironmentOutlined />
             },
             {
@@ -34,6 +54,7 @@ export default class Constants {
                 link: ROUTE_PATH.VEHICLE,
                 icon: <ScheduleOutlined />
             },
+
             // {
             //     label: "Quản lý nhà hàng",
             //     link: ROUTE_PATH.RESTAURANT,
@@ -189,4 +210,10 @@ export default class Constants {
             { label: "50", value: 50 },
         ]
     };
+    static Gender = class {
+        static List = [
+            { label: "Nam", value: true },
+            { label: "Nữ", value: false },
+        ]
+    }
 };

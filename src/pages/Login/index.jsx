@@ -5,6 +5,7 @@ import authService from '../../infrastructure/repositories/auth/service/auth.ser
 import { isTokenStoraged } from '../../infrastructure/utils/storage';
 import { ROUTE_PATH } from '../../core/common/appRouter';
 import { useNavigate } from 'react-router-dom';
+import { FullPageLoading } from '../../infrastructure/common/components/controls/loading';
 const LoginPage = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -44,7 +45,7 @@ const LoginPage = () => {
                     <div className="form-container sign-in-container">
                         <div className='form-flex'>
                             <h1 className='mb-4'>Đăng nhập</h1>
-                            <Row>
+                            <Row gutter={[10, 10]}>
                                 <Col span={24}>
                                     <Input
                                         size={"middle"}
@@ -60,8 +61,10 @@ const LoginPage = () => {
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </Col>
+                                <Col span={24}>
+                                    <button className='w-full' onClick={onLogin}>Đăng nhập</button>
+                                </Col>
                             </Row>
-                            <button onClick={onLogin}>Đăng nhập</button>
                         </div>
                     </div>
                     <div className="overlay-container">
@@ -71,6 +74,7 @@ const LoginPage = () => {
                 </div>
 
             </div>
+            <FullPageLoading isLoading={loading} />
         </div>
     )
 }
