@@ -9,7 +9,7 @@ import { InputSearchCommon } from '../../infrastructure/common/components/input/
 import { ButtonCommon } from '../../infrastructure/common/components/button/button-common'
 import { PlusOutlined } from '@ant-design/icons'
 import { PaginationCommon } from '../../infrastructure/common/components/pagination/Pagination'
-import { convertDateOnly } from '../../infrastructure/helper/helper'
+import { convertDateOnly, genderConfig } from '../../infrastructure/helper/helper'
 import { FullPageLoading } from '../../infrastructure/common/components/controls/loading'
 import Constants from '../../core/common/constant'
 import { ButtonFilterCommon } from '../../infrastructure/common/components/button/button-filter-common'
@@ -36,21 +36,19 @@ const ListEmployeeManagement = () => {
 
     const onGetEmployeeAsync = async ({ name = "", size = pageSize, page = currentPage, startDate = "", endDate = "" }) => {
         const param = {
-            sortBy: "-createdDate",
-            page: page,
+            page: page - 1,
             size: size,
-            name: name,
-            startDate: startDate,
-            endDate: endDate,
+            // name: name,
+            // startDate: startDate,
+            // endDate: endDate,
         }
         try {
             await employeeService.getEmployee(
                 param,
                 setLoading
             ).then((res) => {
-                console.log("res", res);
-                setListEmployee(res)
-                // setTotal(res.totalElements)
+                setListEmployee(res.content)
+                setTotal(res.totalElements)
             })
         }
         catch (error) {
@@ -91,12 +89,24 @@ const ListEmployeeManagement = () => {
     const onCloseModalDelete = () => {
         setIsDeleteModal(false);
     };
-    const onDeleteUser = () => {
-
+    const onDeleteEmloyee = async () => {
+        setIsDeleteModal(false);
+        try {
+            await employeeService.deleteEmployee(
+                idSelected,
+                setLoading
+            ).then((res) => {
+                if (res) {
+                    onSearch().then(() => { })
+                }
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
     }
-    console.log('listEmployee', listEmployee);
     const onNavigate = (id) => {
-        navigate(`${(ROUTE_PATH.VIEW_EMPOYEE).replace(`${Constants.UseParams.Id}`, "")}${id}`);
+        navigate(`${(ROUTE_PATH.VIEW_EMPLOYEE).replace(`${Constants.UseParams.Id}`, "")}${id}`);
     }
     return (
         <MainLayout breadcrumb={"Quản lý nhân viên"} title={"Danh sách nhân viên"} redirect={""}>
@@ -119,7 +129,7 @@ const ListEmployeeManagement = () => {
 
                     </Col>
                     <Col>
-                        <ButtonCommon icon={<PlusOutlined />} classColor="orange" onClick={() => navigate(ROUTE_PATH.ADD_EMPOYEE)} >Thêm mới</ButtonCommon>
+                        <ButtonCommon icon={<PlusOutlined />} classColor="orange" onClick={() => navigate(ROUTE_PATH.ADD_EMPLOYEE)} >Thêm mới</ButtonCommon>
                     </Col>
                 </Row>
             </div>
@@ -156,7 +166,6 @@ const ListEmployeeManagement = () => {
                                 title="Ngày sinh"
                                 width="200px"
                             />
-
                         }
                         key={"dob"}
                         dataIndex={"dob"}
@@ -175,13 +184,13 @@ const ListEmployeeManagement = () => {
                         }
                         key={"sex"}
                         dataIndex={"sex"}
-                    // render={(value, record) => {
-                    //     return (
-                    //         <div>
-                    //             {record.lastName} {record.firstName}
-                    //         </div>
-                    //     )
-                    // }}
+                        render={(value, record) => {
+                            return (
+                                <div>
+                                    {genderConfig(value)}
+                                </div>
+                            )
+                        }}
                     />
                     <Column
                         title={
@@ -220,8 +229,8 @@ const ListEmployeeManagement = () => {
                                 width="300px"
                             />
                         }
-                        key={"address"}
-                        dataIndex={"address"}
+                        key={"startWork"}
+                        dataIndex={"startWork"}
                     />
                     <Column
                         title={
@@ -268,7 +277,7 @@ const ListEmployeeManagement = () => {
                 titleOk={"Xóa nhân viên"}
                 visible={isDeleteModal}
                 handleCancel={onCloseModalDelete}
-                handleOk={onDeleteUser}
+                handleOk={onDeleteEmloyee}
                 title={"Xác nhận"}
             />
             <FullPageLoading isLoading={loading} />

@@ -3,25 +3,22 @@ import React, { useEffect, useState } from 'react';
 import { Col, DatePicker, Row } from 'antd';
 import moment from 'moment';
 import { MessageError } from '../controls/MessageError';
-import { reverseConvertDate, validateFields } from '../../../utils/helper';
+import { reverseConvertDate, validateFields } from '../../../helper/helper';
 import dayjs from 'dayjs';
 
 const InputDateCommon = (props) => {
-    const { label, attribute, setData, validate, setValidate, isRequired, data,
-        disabled = false, dataAttribute, isText, submittedTime
+    const { label, attribute, setData, validate, setValidate, isRequired,
+        disabled = false, dataAttribute, submittedTime, disabledToDate = false
     } = props;
-    const [value, setValue] = useState(undefined);
+    const [value, setValue] = useState("");
     const toDay = new Date();
-
-    // const onChange = (e) => {
-    //     setValue(e.target.value || null);
-    //     setData({
-    //         [attribute]: e.target.value || ''
-    //     });
-    // }
-
     const disabledDate = (current) => {
-        return current && current <= moment().startOf('day');
+        if (disabledToDate) {
+            return current && current < moment().startOf('day');
+        }
+        else {
+            return current && current >= moment().startOf('day');
+        }
     };
 
     const onChange = (dateString) => {
@@ -36,15 +33,14 @@ const InputDateCommon = (props) => {
             validateFields(isImplicitChange, attribute, !value, setValidate, validate, !value ? `Vui lòng nhập ${labelLower}` : "");
         }
     }
-    useEffect(() => {
-        if (dataAttribute) {
-            setValue(dayjs(reverseConvertDate(dataAttribute)) || null);
-        }
-    }, [dataAttribute]);
 
     // useEffect(() => {
-    //     setValidate(reverseConvertDate(dataAttribute))
-    // }, [dataAttribute])
+    //     if (dataAttribute) {
+    //         // setValue(dayjs(reverseConvertDate(dataAttribute)) || null);
+    //         setValue(dataAttribute || "")
+    //     }
+    // }, [dataAttribute]);
+    
     useEffect(() => {
 
         if (submittedTime != null) {
@@ -54,31 +50,31 @@ const InputDateCommon = (props) => {
 
 
     return (
-        <Row className='mb-4 input-common'>
-            <Col xs={24} sm={10} lg={10} xl={6} className='title'>
+        <div className='mb-4 input-common'>
+            <div className='title mb-2'>
                 <span>
                     <span className='label'>{label}</span>
                     <span className='ml-1 is-required'>{isRequired ? "*" : ""} </span>
                 </span>
-            </Col>
-            <Col xs={24} sm={14} lg={14} xl={18}>
+            </div>
+            <div>
                 <DatePicker
                     allowClear={false}
                     size="middle"
-                    className='w-100 input-date-common'
-                    value={(value)}
-                    placeholder={label}
+                    className='w-full input-date-common'
+                    value={value}
+                    placeholder={`Chọn ${label}`}
                     // onChange={(values) => setValue(values)}
                     onChange={onChange}
                     disabledDate={disabledDate}
                     disabled={disabled}
-                    format="YYYY/MM/DD"
+                    format="DD/MM/YYYY"
                     onBlur={() => onBlur(false)}
                 />
 
                 <MessageError isError={validate[attribute]?.isError || false} message={validate[attribute]?.message || ""} />
-            </Col>
-        </Row>
+            </div>
+        </div>
     );
 
 };

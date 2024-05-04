@@ -1,4 +1,5 @@
 import { Endpoint } from "../../../../core/common/apiLink";
+import { FailMessage, SuccessMessage } from "../../../common/components/toast/notificationToast";
 import { RequestService } from "../../../utils/response";
 import { saveToken } from "../../../utils/storage";
 
@@ -7,11 +8,10 @@ class EmployeeService {
         setLoading(true)
         try {
             return await RequestService
-                .get(Endpoint.Employee.List, {
+                .get(Endpoint.Employee.Get, {
                     ...params
                 })
                 .then(response => {
-                    console.log("response", response);
                     if (response) {
                         return response
                     }
@@ -19,22 +19,95 @@ class EmployeeService {
                     return response;
                 });
         } catch (error) {
-            // if (error?.response?.data?.errors[0]?.defaultMessage) {
-            //     FailMessage(messageConfig(error?.response?.data?.errors[0]?.defaultMessage), "")
-            // }
-            // if (error.response.data.message) {
-            //     FailMessage(messageConfig(error.response.data.message), "")
-            // }
-            // else {
-            //     FailMessage("Đăng nhập không thành công", "Tài khoản của bạn chưa đúng")
-            // }
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    };
+    async getEmployeeById(id, setLoading) {
+        setLoading(true)
+        try {
+            return await RequestService
+                .get(`${Endpoint.Employee.Get}/${id}`)
+                .then(response => {
+                    if (response) {
+                        return response
+                    }
+                    setLoading(false)
+                    return response;
+                });
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    };
+    async addEmployee(data, onBack, setLoading) {
+        setLoading(true)
+        try {
+            return await RequestService
+                .post(Endpoint.Employee.Add,
+                    data
+                )
+                .then(response => {
+                    if (response) {
+                        onBack()
+                        SuccessMessage("Thêm mới thành công", "")
+                        return response
+                    }
+                    setLoading(false)
+                    return response;
+                });
+        } catch (error) {
+            FailMessage("Thêm mới không thành công", "Vui lòng kiểm tra thông tin")
             console.error(error)
         } finally {
             setLoading(false);
         }
     }
-
-
+    async updateEmployee(id, data, onBack, setLoading) {
+        setLoading(true)
+        try {
+            return await RequestService
+                .put(`${Endpoint.Employee.Update}/${id}`,
+                    data
+                )
+                .then(response => {
+                    if (response) {
+                        onBack()
+                        SuccessMessage("Cập nhật thành công", "")
+                        return response
+                    }
+                    setLoading(false)
+                    return response;
+                });
+        } catch (error) {
+            FailMessage("Cập nhật không thành công", "Vui lòng kiểm tra thông tin")
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    }
+    async deleteEmployee(id, setLoading) {
+        setLoading(true)
+        try {
+            return await RequestService
+                .delete(`${Endpoint.Employee.Delete}/${id}`)
+                .then(response => {
+                    if (response) {
+                        SuccessMessage("Xóa thành công", "")
+                        return response
+                    }
+                    setLoading(false)
+                    return response;
+                });
+        } catch (error) {
+            FailMessage("Xóa không thành công", "Vui lòng kiểm tra thông tin")
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    }
 }
 
 export default new EmployeeService();

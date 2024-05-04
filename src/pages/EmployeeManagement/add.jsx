@@ -6,22 +6,32 @@ import InputTextCommon from '../../infrastructure/common/components/input/input-
 import { ButtonCommon } from '../../infrastructure/common/components/button/button-common';
 import { FullPageLoading } from '../../infrastructure/common/components/controls/loading';
 import { useNavigate } from 'react-router-dom';
+import employeeService from '../../infrastructure/repositories/employee/service/employee.service';
+import { WarningMessage } from '../../infrastructure/common/components/toast/notificationToast';
+import InputDateCommon from '../../infrastructure/common/components/input/input-date';
+import InputSelectGenderCommon from '../../infrastructure/common/components/input/select-category';
+import { convertDate, convertDateOnly } from '../../infrastructure/helper/helper';
+import InputSelectPositionCommon from '../../infrastructure/common/components/input/select-position';
+import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
 
 const AddEmployeeManagement = () => {
     const [validate, setValidate] = useState({});
     const [loading, setLoading] = useState(false);
     const [submittedTime, setSubmittedTime] = useState();
+    const [imageUrl, setImageUrl] = useState(null);
+    const [avatar, setAvatar] = useState(null);
+
     const [_data, _setData] = useState({});
-    const dataLocation = _data;
+    const dataEmployee = _data;
 
     const navigate = useNavigate();
 
     const onBack = () => {
-        navigate(ROUTE_PATH.SHIFT)
+        navigate(ROUTE_PATH.EMPLOYEE)
     };
-    const setDataLocation = (data) => {
-        Object.assign(dataLocation, { ...data });
-        _setData({ ...dataLocation });
+    const setDataEmployee = (data) => {
+        Object.assign(dataEmployee, { ...data });
+        _setData({ ...dataEmployee });
     };
 
     const isValidData = () => {
@@ -38,29 +48,56 @@ const AddEmployeeManagement = () => {
         return allRequestOK;
     };
 
+    const onAddEmployee = async () => {
+        await setSubmittedTime(Date.now());
+        if (isValidData()) {
+            await employeeService.addEmployee({
+                name: dataEmployee.name,
+                email: dataEmployee.email,
+                dob: convertDate(dataEmployee.dob),
+                sex: dataEmployee.sex,
+                role: dataEmployee.role,
+                cccd: dataEmployee.cccd,
+                phone: dataEmployee.phone,
+                lastName: dataEmployee.lastName,
+                sdt: dataEmployee.sdt,
+                address: dataEmployee.address,
+                position: dataEmployee.position,
+                startWork: convertDate(dataEmployee.startWork)
+            },
+                onBack,
+                setLoading
+            )
+        }
+        else {
+            WarningMessage("Nhập thiếu thông tin", "Vui lòng nhập đầy đủ thông tin")
+        };
+    };
+
     return (
-        <MainLayout breadcrumb={"Quản lý ca làm việc"} title={"Thêm ca làm việc"} redirect={ROUTE_PATH.SHIFT}>
-            <div className='main-page h-100 flex-1 auto bg-white px-4 py-8'>
-                <div className='bg-white'>
+        <MainLayout breadcrumb={"Quản lý nhân viên"} title={"Thêm nhân viên"} redirect={ROUTE_PATH.EMPLOYEE}>
+            <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
+                <div className='bg-white scroll-auto'>
                     <Row>
                         <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
                             <div className='legend-title'>Thêm mới ảnh</div>
-                            {/* <UploadFileCommon
-                                id={"imageUpload"}
-                                label={''}
-                                dataAttribute={dataLocation.hinhAnh}
-                            /> */}
+                            <UploadAvatar
+                                attributeImg={dataEmployee.avatar}
+                                imageUrl={imageUrl}
+                                setAvatar={setAvatar}
+                                setImageUrl={setImageUrl}
+                            />
                         </Col>
                         <Col xs={24} sm={24} md={12} lg={16} xl={18} xxl={19} className='border-add'>
                             <div className='legend-title'>Thêm thông tin mới</div>
                             <Row gutter={[30, 0]}>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                                     <InputTextCommon
-                                        label={"Tên ca làm việc"}
-                                        attribute={"tenDiaDiem"}
+                                        label={"Tên nhân viên"}
+                                        attribute={"name"}
                                         isRequired={true}
-                                        dataAttribute={dataLocation.tenDiaDiem}
-                                        setData={setDataLocation}
+                                        dataAttribute={dataEmployee.name}
+                                        setData={setDataEmployee}
                                         disabled={false}
                                         validate={validate}
                                         setValidate={setValidate}
@@ -69,11 +106,24 @@ const AddEmployeeManagement = () => {
                                 </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                                     <InputTextCommon
+                                        label={"Email"}
+                                        attribute={"email"}
+                                        isRequired={true}
+                                        dataAttribute={dataEmployee.email}
+                                        setData={setDataEmployee}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                    />
+                                </Col>
+                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                    <InputDateCommon
                                         label={"Ngày sinh"}
-                                        attribute={"tenDiaDiemUS"}
+                                        attribute={"dob"}
                                         isRequired={true}
-                                        dataAttribute={dataLocation.tenDiaDiemUS}
-                                        setData={setDataLocation}
+                                        dataAttribute={dataEmployee.dob}
+                                        setData={setDataEmployee}
                                         disabled={false}
                                         validate={validate}
                                         setValidate={setValidate}
@@ -81,12 +131,12 @@ const AddEmployeeManagement = () => {
                                     />
                                 </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                    <InputTextCommon
+                                    <InputSelectGenderCommon
                                         label={"Giới tính"}
-                                        attribute={"diaChi"}
+                                        attribute={"sex"}
                                         isRequired={true}
-                                        dataAttribute={dataLocation.diaChi}
-                                        setData={setDataLocation}
+                                        dataAttribute={dataEmployee.sex}
+                                        setData={setDataEmployee}
                                         disabled={false}
                                         validate={validate}
                                         setValidate={setValidate}
@@ -95,52 +145,37 @@ const AddEmployeeManagement = () => {
                                 </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                                     <InputTextCommon
-                                        label={"CMT"}
-                                        attribute={"diaChiUS"}
+                                        label={"Căn cước công dân"}
+                                        attribute={"cccd"}
                                         isRequired={true}
-                                        dataAttribute={dataLocation.diaChiUS}
-                                        setData={setDataLocation}
+                                        dataAttribute={dataEmployee.cccd}
+                                        setData={setDataEmployee}
                                         disabled={false}
                                         validate={validate}
                                         setValidate={setValidate}
                                         submittedTime={submittedTime}
                                     />
                                 </Col>
-                                {/* <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                    <InputSelectDistrictCommon
-                                        label={"Quận huyện"}
-                                        attribute={"idQuanHuyen"}
-                                        isRequired={true}
-                                        dataAttribute={dataLocation.idQuanHuyen}
-                                        setData={setDataLocation}
-                                        disabled={false}
-                                        validate={validate}
-                                        setValidate={setValidate}
-                                        submittedTime={submittedTime}
-
-                                    />
-                                </Col>
-                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                    <InputSelectCategoryCommon
-                                        label={"Danh mục"}
-                                        attribute={"idDanhMuc"}
-                                        isRequired={true}
-                                        dataAttribute={dataLocation.idDanhMuc}
-                                        setData={setDataLocation}
-                                        disabled={false}
-                                        validate={validate}
-                                        setValidate={setValidate}
-                                        submittedTime={submittedTime}
-
-                                    />
-                                </Col> */}
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                                     <InputTextCommon
+                                        label={"Số điện thoại"}
+                                        attribute={"phone"}
+                                        isRequired={true}
+                                        dataAttribute={dataEmployee.phone}
+                                        setData={setDataEmployee}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                    />
+                                </Col>
+                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                    <InputSelectPositionCommon
                                         label={"Chức vụ"}
-                                        attribute={"lat"}
+                                        attribute={"position"}
                                         isRequired={true}
-                                        dataAttribute={dataLocation.lat}
-                                        setData={setDataLocation}
+                                        dataAttribute={dataEmployee.position}
+                                        setData={setDataEmployee}
                                         disabled={false}
                                         validate={validate}
                                         setValidate={setValidate}
@@ -150,10 +185,10 @@ const AddEmployeeManagement = () => {
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                                     <InputTextCommon
                                         label={"Địa chỉ"}
-                                        attribute={"long"}
+                                        attribute={"address"}
                                         isRequired={true}
-                                        dataAttribute={dataLocation.long}
-                                        setData={setDataLocation}
+                                        dataAttribute={dataEmployee.address}
+                                        setData={setDataEmployee}
                                         disabled={false}
                                         validate={validate}
                                         setValidate={setValidate}
@@ -161,16 +196,17 @@ const AddEmployeeManagement = () => {
                                     />
                                 </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                    <InputTextCommon
+                                    <InputDateCommon
                                         label={"Ngày làm việc"}
-                                        attribute={"gioMoCua"}
+                                        attribute={"startWork"}
                                         isRequired={true}
-                                        dataAttribute={dataLocation.gioMoCua}
-                                        setData={setDataLocation}
+                                        dataAttribute={dataEmployee.startWork}
+                                        setData={setDataEmployee}
                                         disabled={false}
                                         validate={validate}
                                         setValidate={setValidate}
                                         submittedTime={submittedTime}
+                                        disabledToDate={true}
                                     />
                                 </Col>
                             </Row>
@@ -178,13 +214,13 @@ const AddEmployeeManagement = () => {
                     </Row>
                 </div>
             </div>
-            <div className='container-btn main-page bg-white p-4 flex flex-col '>
+            <div className='container-btn main-page bg-white p-4 flex flex-col'>
                 <Row justify={"center"}>
                     <Col className='mx-1'>
                         <ButtonCommon onClick={onBack} classColor="blue">Quay lại</ButtonCommon>
                     </Col>
                     <Col className='mx-1'>
-                        <ButtonCommon onClick={() => { }} classColor="orange">Thêm mới</ButtonCommon>
+                        <ButtonCommon onClick={onAddEmployee} classColor="orange">Thêm mới</ButtonCommon>
                     </Col>
                 </Row>
             </div >

@@ -12,9 +12,29 @@ export const ROUTE_PATH = {
     VIEW_SHIFT: `${PREFIX}/shift/view/:id`,
     ADD_SHIFT: `${PREFIX}/shift/add`,
 
-    EMPOYEE: `${PREFIX}/employee`,
-    VIEW_EMPOYEE: `${PREFIX}/employee/view/:id`,
-    ADD_EMPOYEE: `${PREFIX}/employee/add`,
+    EMPLOYEE: `${PREFIX}/employee`,
+    VIEW_EMPLOYEE: `${PREFIX}/employee/view/:id`,
+    ADD_EMPLOYEE: `${PREFIX}/employee/add`,
+
+    POSITION: `${PREFIX}/position`,
+    VIEW_POSITION: `${PREFIX}/position/view/:id`,
+    ADD_POSITION: `${PREFIX}/position/add`,
+
+    EQUIP_TYPE: `${PREFIX}/equip-type`,
+    VIEW_EQUIP_TYPE: `${PREFIX}/equip-type/view/:id`,
+    ADD_EQUIP_TYPE: `${PREFIX}/equip-type/add`,
+
+    EQUIPMENT: `${PREFIX}/equipments`,
+    VIEW_EQUIPMENT: `${PREFIX}/equipments/view/:id`,
+    ADD_EQUIPMENT: `${PREFIX}/equipments/add`,
+
+    MEMBER_CARD: `${PREFIX}/member-card`,
+    VIEW_MEMBER_CARD: `${PREFIX}/member-card/view/:id`,
+    ADD_MEMBER_CARD: `${PREFIX}/member-card/add`,
+
+    MEMBER: `${PREFIX}/members`,
+    VIEW_MEMBER: `${PREFIX}/members/view/:id`,
+    ADD_MEMBER: `${PREFIX}/members/add`,
 
     CATEGORY_LAYOUT_MAP: `${PREFIX}/category-layout-map`,
     VIEW_CATEGORY_LAYOUT_MAP: `${PREFIX}/category-layout-map/view/:id`,

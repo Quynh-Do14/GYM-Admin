@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from 'antd';
 import "../../../../assets/styles/components/input.css"
-import { validateEmail, validateFormInputNumber, validatePhoneNumber } from '../../../helper/validate';
+import { validateCMND, validateEmail, validateFormInputNumber, validatePhoneNumber } from '../../../helper/validate';
 import { validateFields } from '../../../helper/helper';
 import { MessageError } from '../controls/MessageError';
 
@@ -37,13 +37,13 @@ const InputTextCommon = (props) => {
                 checkValidate = validateEmail(value);
                 validateFields(isImplicitChange, attribute, !checkValidate, setValidate, validate, !checkValidate ? value ? `Vui lòng nhập đúng định dạng ${labelLower}` : `Vui lòng nhập ${labelLower}` : "");
             }
-            if (attribute.includes("sdt")) {
+            if (attribute.includes("phone")) {
                 checkValidate = validatePhoneNumber(value);
                 validateFields(isImplicitChange, attribute, !checkValidate, setValidate, validate, !checkValidate ? value ? `Vui lòng nhập đúng định dạng ${labelLower}` : `Vui lòng nhập ${labelLower}` : "");
             }
-            if (attribute.includes("lat") || attribute.includes("long")) {
-                checkValidate = validateFormInputNumber(value);
-                validateFields(isImplicitChange, attribute, !checkValidate, setValidate, validate, !checkValidate ? value ? `Vui lòng nhập đúng định dạng số ${labelLower}` : `Vui lòng nhập ${labelLower}` : "");
+            if (attribute.includes("cccd") || attribute.includes("long")) {
+                checkValidate = validateCMND(value);
+                validateFields(isImplicitChange, attribute, !checkValidate, setValidate, validate, !checkValidate ? value ? `${label} bao gồm 12 số` : `Vui lòng nhập ${labelLower}` : "");
             }
         }
     };

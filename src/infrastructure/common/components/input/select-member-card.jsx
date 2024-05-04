@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row, Select } from "antd";
-import { validateFields } from '../../../utils/helper';
-import { MessageError } from '../controls/MessageError';
-import '../../../../assets/css/common/input.css'
+import { Select } from "antd";
 import { useRecoilValue } from "recoil";
-import { CategoryState } from "../../../../core/common/atoms/category/categoryState";
-import { CategoryVehicleState } from "../../../../core/common/atoms/category/categoryVehicleState";
-const InputSelectCategoryVehicleCommon = (props) => {
+import { validateFields } from '../../../helper/helper';
+import { MessageError } from '../controls/MessageError';
+import { MemberCardState } from "../../../../core/atoms/memberCard/memberCardState";
+
+const InputSelectMemberCardCommon = (props) => {
     const {
         dataAttribute,
         setData,
@@ -18,7 +17,7 @@ const InputSelectCategoryVehicleCommon = (props) => {
         isRequired,
         label
     } = props;
-    const dataCategory = useRecoilValue(CategoryVehicleState);
+    const dataMemberCard = useRecoilValue(MemberCardState);
     const [value, setValue] = useState("");
 
     const onChange = async (val) => {
@@ -65,7 +64,7 @@ const InputSelectCategoryVehicleCommon = (props) => {
                             showSearch
                             allowClear={false}
                             showArrow
-                            className="w-100"
+                            className="w-full text-left"
                             disabled={disabled}
                             value={value}
                             listHeight={120}
@@ -75,14 +74,14 @@ const InputSelectCategoryVehicleCommon = (props) => {
                             getPopupContainer={trigger => trigger.parentNode}
                         >
                             {
-                                dataCategory && dataCategory.length && dataCategory.map((item, index) => {
+                                dataMemberCard && dataMemberCard.length && dataMemberCard.map((item, index) => {
                                     return (
                                         <Select.Option
                                             key={index}
-                                            value={item.idDanhMucDiaDiem}
-                                            title={item.tenDanhMuc}
+                                            value={item.id}
+                                            title={item.id}
                                         >
-                                            {item.tenDanhMuc}
+                                            {item.id}
                                         </Select.Option>
                                     )
                                 })
@@ -95,4 +94,4 @@ const InputSelectCategoryVehicleCommon = (props) => {
         </div>
     );
 }
-export default InputSelectCategoryVehicleCommon;
+export default InputSelectMemberCardCommon;
