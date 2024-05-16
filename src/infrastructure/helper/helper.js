@@ -1,4 +1,6 @@
 import moment from "moment";
+import Constants from "../../core/common/constant";
+import dayjs from "dayjs";
 // import noImgShow from "../../assets/img/no-img-show.jpg";
 
 export const validateFields = (isImplicitChange = false, key, isCheck, setError, error, message) => {
@@ -32,14 +34,13 @@ export const numberToAlphabet = (number) => {
 export const convertDate = (date) => {
     if (date) {
         let dateFormat = new Date(date);
-        return moment(dateFormat).format("DD-MM-YYYY hh:mm:ss");
+        return dayjs(dateFormat).format("DD-MM-YYYY hh:mm:ss");
     } return null;
 
 };
 export const convertDateOnly = (date) => {
     if (date) {
-        let dateFormat = new Date(date);
-        return moment(dateFormat).format("DD/MM/YYYY");
+        return moment(date, 'DD-MM-YYYY HH:mm:ss').format("DD/MM/YYYY");
     } return null;
 };
 
@@ -49,23 +50,6 @@ export const convertTimeOnly = (date) => {
         return moment(dateFormat).format("hh:mm");
     } return null;
 };
-
-export const reverseConvertDate = (inputDateString) => {
-    const inputDate = new Date(inputDateString);
-
-    // Format the date as "Thu, 26 Oct 2023 13:05:32 GMT"
-    const formattedDate = inputDate.toUTCString();
-    return formattedDate
-}
-
-// export const showImage = (img) => {
-//     if (img) {
-//         return img
-//     }
-//     else {
-//         return noImgShow
-//     }
-// }
 
 export const convertMinutes = (minutes) => {
     const hours = Math.floor(minutes / 60);
@@ -98,6 +82,28 @@ export const getCurrentDateTimeISO = (originalDate) => {
     return formattedDateString
 }
 
+export const convertTimeParams = (date) => {
+    if (date) {
+        const inputDate = new Date(date);
+        const year = inputDate.getFullYear();
+        const month = inputDate.getMonth() + 1; // Tháng trong JavaScript đếm từ 0 đến 11
+        const day = inputDate.getDate();
+        const hours = inputDate.getHours();
+        const minutes = inputDate.getMinutes();
+        const seconds = inputDate.getSeconds();
+
+        // Chuyển đổi các giá trị thành chuỗi và thêm số 0 đằng trước nếu cần thiết
+        const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        return formattedDate
+    } return null;
+};
+
+export const convertDateBooking = (date) => {
+    if (date) {
+        let dateFormat = new Date(date);
+        return moment(dateFormat).format("YYYY-MM-DDThh:mm:ss");
+    } return null;
+};
 
 export const timeToMilliseconds = (timeString) => {
     const [hours, minutes, seconds] = timeString.split(':').map(Number);
@@ -136,11 +142,11 @@ export const checkPublishExam = (startDate, endDate) => {
 }
 
 export const genderConfig = (gender) => {
-    if (gender) {
-        return 'Nam';
+    if (gender == Constants.Gender.MALE.value) {
+        return Constants.Gender.MALE.label;
     }
-    else {
-        return "Nữ"
+    else if (gender == Constants.Gender.FEMALE.value) {
+        return Constants.Gender.FEMALE.label
     }
 }
 // export const configResultType = (type) => {

@@ -13,7 +13,6 @@ import positionService from '../../repositories/position/service/position.servic
 import { useRecoilState } from 'recoil';
 import { PositionState } from '../../../core/atoms/position/positionState';
 import { MemberCardState } from '../../../core/atoms/memberCard/memberCardState';
-import memberCardService from '../../repositories/memberCard/service/memberCard.service';
 
 const { Header, Content, Sider } = Layout;
 
@@ -25,6 +24,7 @@ const MainLayout = ({ ...props }) => {
     const [loading, setLoading] = useState(false);
     const [, setDataPosition] = useRecoilState(PositionState);
     const [, setDataMemberCard] = useRecoilState(MemberCardState);
+    const [dataProfile, setDataProfile] = useState();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -51,6 +51,22 @@ const MainLayout = ({ ...props }) => {
         }
     }
 
+    const getProfileUser = async () => {
+        try {
+            await authService.profile(
+                () => { }
+            ).then((response) => {
+                if (response) {
+                    setDataProfile(response)
+                }
+            })
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    useEffect(() => {
+        getProfileUser().then(() => { })
+    }, [])
 
     const onGetPositionAsync = async () => {
         const param = {}
@@ -59,7 +75,7 @@ const MainLayout = ({ ...props }) => {
                 param,
                 setLoading
             ).then((res) => {
-                setDataPosition(res)
+                setDataPosition(res.content)
             })
         }
         catch (error) {
@@ -70,23 +86,23 @@ const MainLayout = ({ ...props }) => {
         onGetPositionAsync().then(_ => { });
     }, []);
 
-    const onGetMemberCardAsync = async () => {
-        const param = {}
-        try {
-            await memberCardService.getMemberCard(
-                param,
-                setLoading
-            ).then((res) => {
-                setDataMemberCard(res.content)
-            })
-        }
-        catch (error) {
-            console.error(error)
-        }
-    }
-    useEffect(() => {
-        onGetMemberCardAsync().then(_ => { });
-    }, []);
+    // const onGetMemberCardAsync = async () => {
+    //     const param = {}
+    //     try {
+    //         await memberCardService.getMemberCard(
+    //             param,
+    //             setLoading
+    //         ).then((res) => {
+    //             setDataMemberCard(res.content)
+    //         })
+    //     }
+    //     catch (error) {
+    //         console.error(error)
+    //     }
+    // }
+    // useEffect(() => {
+    //     onGetMemberCardAsync().then(_ => { });
+    // }, []);
     const listAction = () => {
         return (
             <Menu className='action-admin'>
@@ -125,11 +141,11 @@ const MainLayout = ({ ...props }) => {
                         <Row align={"middle"} >
                             <Col className='mr-2 flex flex-col align-bottom'>
                                 <div className='user-name'>
-                                    {sessionStorage.getItem("firstName")} {sessionStorage.getItem("lastName")}
+                                    {dataProfile?.name}
                                 </div>
-                                <div className='role'>
-                                    {sessionStorage.getItem("role")}
-                                </div>
+                                {/* <div className='role'>
+                                    {dataProfile.roles[0]?.name}
+                                </div> */}
                             </Col>
                             <Col>
                                 <Dropdown overlay={listAction} trigger={['click']}>

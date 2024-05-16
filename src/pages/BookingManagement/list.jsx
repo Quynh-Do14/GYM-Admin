@@ -9,18 +9,18 @@ import { InputSearchCommon } from '../../infrastructure/common/components/input/
 import { ButtonCommon } from '../../infrastructure/common/components/button/button-common'
 import { PlusOutlined } from '@ant-design/icons'
 import { PaginationCommon } from '../../infrastructure/common/components/pagination/Pagination'
-import { convertDateOnly, genderConfig } from '../../infrastructure/helper/helper'
+import { convertDate } from '../../infrastructure/helper/helper'
 import { FullPageLoading } from '../../infrastructure/common/components/controls/loading'
 import Constants from '../../core/common/constant'
 import { ButtonFilterCommon } from '../../infrastructure/common/components/button/button-filter-common'
 import { ROUTE_PATH } from '../../core/common/appRouter'
 import { useNavigate } from 'react-router-dom';
 import DialogConfirmCommon from '../../infrastructure/common/components/modal/dialogConfirm'
-import employeeService from '../../infrastructure/repositories/employee/service/employee.service'
+import bookingService from '../../infrastructure/repositories/booking/service/booking.service'
 
 let timeout
-const ListEmployeeManagement = () => {
-    const [listEmployee, setListEmployee] = useState([])
+const ListBookingManagement = () => {
+    const [listBooking, setListBooking] = useState([])
     const [total, setTotal] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -43,11 +43,11 @@ const ListEmployeeManagement = () => {
             // endDate: endDate,
         }
         try {
-            await employeeService.getEmployee(
+            await bookingService.getBooking(
                 param,
                 setLoading
             ).then((res) => {
-                setListEmployee(res.content)
+                setListBooking(res.content)
                 setTotal(res.totalElements)
             })
         }
@@ -92,7 +92,7 @@ const ListEmployeeManagement = () => {
     const onDeleteEmloyee = async () => {
         setIsDeleteModal(false);
         try {
-            await employeeService.deleteEmployee(
+            await bookingService.deleteBooking(
                 idSelected,
                 setLoading
             ).then((res) => {
@@ -106,10 +106,10 @@ const ListEmployeeManagement = () => {
         }
     }
     const onNavigate = (id) => {
-        navigate(`${(ROUTE_PATH.VIEW_EMPLOYEE).replace(`${Constants.UseParams.Id}`, "")}${id}`);
+        navigate(`${(ROUTE_PATH.VIEW_BOOKING).replace(`${Constants.UseParams.Id}`, "")}${id}`);
     }
     return (
-        <MainLayout breadcrumb={"Quản lý nhân viên"} title={"Danh sách nhân viên"} redirect={""}>
+        <MainLayout breadcrumb={"Quản lý đặt lịch"} title={"Danh sách đặt lịch"} redirect={""}>
             <div className='flex flex-col header-page'>
                 <Row className='filter-page mb-2 py-2-5' gutter={[10, 10]} justify={"space-between"} align={"middle"}>
                     <Col xs={24} sm={24} lg={16}>
@@ -129,13 +129,13 @@ const ListEmployeeManagement = () => {
 
                     </Col>
                     <Col>
-                        <ButtonCommon icon={<PlusOutlined />} classColor="orange" onClick={() => navigate(ROUTE_PATH.ADD_EMPLOYEE)} >Thêm mới</ButtonCommon>
+                        <ButtonCommon icon={<PlusOutlined />} classColor="orange" onClick={() => navigate(ROUTE_PATH.ADD_BOOKING)} >Thêm mới</ButtonCommon>
                     </Col>
                 </Row>
             </div>
             <div className='flex-1 overflow-auto bg-[#FFFFFF] content-page'>
                 <Table
-                    dataSource={listEmployee}
+                    dataSource={listBooking}
                     pagination={false}
                     className='table-common'
                 >
@@ -153,94 +153,60 @@ const ListEmployeeManagement = () => {
                     <Column
                         title={
                             <TitleTableCommon
-                                title="Tên nhân viên"
-                                width="200px"
+                                title="Người hướng dẫn"
+                                width="300px"
                             />
                         }
-                        key={"name"}
-                        dataIndex={"name"}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="Ngày sinh"
-                                width="200px"
-                            />
-                        }
-                        key={"dob"}
-                        dataIndex={"dob"}
+                        key={"employee"}
+                        dataIndex={"employee"}
                         render={(value) => {
                             return (
-                                <div>{convertDateOnly(value)} </div>
+                                <div>{value?.name} </div>
                             )
                         }}
                     />
                     <Column
                         title={
                             <TitleTableCommon
-                                title="Giới tính"
-                                width="200px"
-                            />
-                        }
-                        key={"sex"}
-                        dataIndex={"sex"}
-                        render={(value, record) => {
-                            return (
-                                <div>
-                                    {genderConfig(value)}
-                                </div>
-                            )
-                        }}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="CMT"
-                                width="200px"
-                            />
-                        }
-                        key={"cccd"}
-                        dataIndex={"cccd"}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="Chức vụ"
+                                title="Thành viên"
                                 width="300px"
                             />
                         }
-                        key={"position"}
-                        dataIndex={"position"}
-                        render={(value, record) => {
-                            return (
-                                <div>
-                                    {value?.name}
-                                </div>
-                            )
-                        }}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="Địa chỉ"
-                                width="300px"
-                            />
-                        }
-                        key={"address"}
-                        dataIndex={"address"}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="Ngày làm việc"
-                                width="300px"
-                            />
-                        }
-                        key={"startWork"}
-                        dataIndex={"startWork"}
+                        key={""}
+                        dataIndex={"member"}
                         render={(value) => {
                             return (
-                                <div>{convertDateOnly(value)} </div>
+                                <div>{value?.name} </div>
+                            )
+                        }}
+                    />
+                    <Column
+                        title={
+                            <TitleTableCommon
+                                title="Ngày đặt"
+                                width="300px"
+                            />
+                        }
+                        key={"bookingTime"}
+                        dataIndex={"bookingTime"}
+                        render={(value) => {
+                            return (
+                                <div>{convertDate(value)} </div>
+                            )
+                        }}
+                    />
+                    <Column
+                        title={
+                            <TitleTableCommon
+                                title="Ngày kết thúc"
+                                width="300px"
+                            />
+                        }
+                        key={"endTime"}
+                        dataIndex={"endTime"}
+                        render={(value) => {
+                            return (
+                                <div>{convertDate(value)} </div>
                             )
                         }}
                     />
@@ -284,9 +250,9 @@ const ListEmployeeManagement = () => {
                 />
             </div>
             <DialogConfirmCommon
-                message={"Bạn có muốn xóa nhân viên này ra khỏi hệ thống"}
+                message={"Bạn có muốn xóa đặt lịch này ra khỏi hệ thống"}
                 titleCancel={"Bỏ qua"}
-                titleOk={"Xóa nhân viên"}
+                titleOk={"Xóa đặt lịch"}
                 visible={isDeleteModal}
                 handleCancel={onCloseModalDelete}
                 handleOk={onDeleteEmloyee}
@@ -297,4 +263,4 @@ const ListEmployeeManagement = () => {
     )
 }
 
-export default ListEmployeeManagement
+export default ListBookingManagement

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Select } from "antd";
 import Constants from "../../../../core/common/constant";
 import { MessageError } from "../controls/MessageError";
-import { validateFields } from "../../../helper/helper";
-const InputSelectCommon = (props) => {
+import { convertTimeParams, validateFields } from "../../../helper/helper";
+import bookingService from "../../../repositories/booking/service/booking.service";
+const InputSelectEmployeeCommon = (props) => {
     const {
         dataAttribute,
+        data,
         setData,
         attribute,
         disabled,
@@ -18,14 +20,39 @@ const InputSelectCommon = (props) => {
     } = props;
 
     const [value, setValue] = useState("");
-
+    const [listEmployeePT, setListEmployeePT] = useState([]);
     const onChange = async (val) => {
         setValue(val || "");
         setData({
             [attribute]: val
         });
     };
+    const getEmployeePTAsync = async () => {
+        if (data.bookingTime && data.endTime) {
+            const params = {
+                bookingTime: convertTimeParams(data.bookingTime),
+                endTime: convertTimeParams(data.endTime),
+            }
+            try {
+                await bookingService.getEmloyeePT(
+                    params,
+                    () => { }
+                ).then((response) => {
+                    if (response) {
+                        setListEmployeePT(response)
+                    }
+                })
+            } catch (error) {
+                console.error(error);
+            }
+        }
 
+    }
+    useEffect(() => {
+        if (data.bookingTime && data.endTime) {
+            getEmployeePTAsync().then(() => { })
+        }
+    }, [data.bookingTime, data.endTime])
     let labelLower = label.toLowerCase();
     const validateBlur = (isImplicitChange = false) => {
         validateFields(isImplicitChange, attribute, !value, setValidate, validate, !value ? `Vui lòng nhập ${labelLower}` : "");
@@ -67,19 +94,19 @@ const InputSelectCommon = (props) => {
                         value={value}
                         listHeight={120}
                         onChange={onChange}
-                        onBlur={onBlur}
+                        onBlur={() => onBlur(false)}
                         placeholder={`Chọn ${label}`}
                         getPopupContainer={trigger => trigger.parentNode}
                     >
                         {
-                            listDataOfItem && listDataOfItem.length && listDataOfItem.map((item, index) => {
+                            listEmployeePT && listEmployeePT.length && listEmployeePT.map((item, index) => {
                                 return (
                                     <Select.Option
                                         key={index}
-                                        value={item.value}
-                                        title={item.label}
+                                        value={item.id}
+                                        title={item.name}
                                     >
-                                        {item.label}
+                                        {item.name}
                                     </Select.Option>
                                 )
                             })
@@ -91,4 +118,4 @@ const InputSelectCommon = (props) => {
         </div>
     );
 }
-export default InputSelectCommon;
+export default InputSelectEmployeeCommon;

@@ -29,7 +29,7 @@ const InputSelectPositionCommon = (props) => {
 
     let labelLower = label.toLowerCase();
     const validateBlur = (isImplicitChange = false) => {
-        validateFields(isImplicitChange, attribute, !value, setValidate, validate, !value ? `Vui lòng nhập đúng định dạng ${labelLower}` : "");
+        validateFields(isImplicitChange, attribute, !value, setValidate, validate, !value ? `Vui lòng nhập ${labelLower}` : "");
     };
 
     const onBlur = () => {

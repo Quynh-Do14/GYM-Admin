@@ -2,9 +2,10 @@ export class Endpoint {
     static Auth = class {
         // static Login = "/auth/login";
         static Login = "/login"
+        static Profile = "/profile"
     }
     static User = class {
-        static User = "/admin"
+        static Get = "/users"
     }
     static Employee = class {
         static Get = "/employees"
@@ -32,14 +33,22 @@ export class Endpoint {
     }
     static Member = class {
         static Get = "/members"
-        static Add = "/members/add"
+        static Add = "/members/admin/add"
         static Update = "/members/update"
         static Delete = "/members/delete"
     }
-    static MemberCard = class {
-        static Get = "/member-cards"
-        static Add = "/member-cards/add"
-        static Update = "/member-cards/update"
-        static Delete = "/member-cards/delete"
+    static Packages = class {
+        static Get = "/packages"
+        static Add = "/packages/add"
+        static Update = "/packages/update"
+        static Delete = "/packages/delete"
+    }
+    static Booking = class {
+        static Get = "/bookings/admin/all"
+        static GetById = "/bookings"
+        static GetPT = "/bookings/add"
+        static Add = "/bookings/add"
+        static Update = "/bookings/update"
+        static Delete = "/bookings/delete"
     }
 };

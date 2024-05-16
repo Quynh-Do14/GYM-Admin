@@ -14,19 +14,24 @@ export default class Constants {
                 link: ROUTE_PATH.POSITION,
                 icon: <UserOutlined />
             },
+            // {
+            //     label: "Ca làm việc",
+            //     link: ROUTE_PATH.SHIFT,
+            //     icon: <DatabaseOutlined />
+            // },
+            // {
+            //     label: "Nhân viên - Ca làm việc",
+            //     link: ROUTE_PATH.CATEGORY_VEHICLE,
+            //     icon: <DatabaseOutlined />
+            // },
+            // {
+            //     label: "Quản lý thẻ thành viên",
+            //     link: ROUTE_PATH.MEMBER_CARD,
+            //     icon: <ScheduleOutlined />
+            // },
             {
-                label: "Ca làm việc",
-                link: ROUTE_PATH.SHIFT,
-                icon: <DatabaseOutlined />
-            },
-            {
-                label: "Nhân viên - Ca làm việc",
-                link: ROUTE_PATH.CATEGORY_VEHICLE,
-                icon: <DatabaseOutlined />
-            },
-            {
-                label: "Quản lý thẻ thành viên",
-                link: ROUTE_PATH.MEMBER_CARD,
+                label: "Quản lý gói thành viên",
+                link: ROUTE_PATH.PACKAGE,
                 icon: <ScheduleOutlined />
             },
             {
@@ -45,13 +50,8 @@ export default class Constants {
                 icon: <EnvironmentOutlined />
             },
             {
-                label: "Quản lý phòng tập",
-                link: ROUTE_PATH.VEHICLE,
-                icon: <ScheduleOutlined />
-            },
-            {
-                label: "Quản lý phòng - thiết bị",
-                link: ROUTE_PATH.VEHICLE,
+                label: "Quản lý đặt lịch",
+                link: ROUTE_PATH.BOOKING,
                 icon: <ScheduleOutlined />
             },
 
@@ -211,9 +211,17 @@ export default class Constants {
         ]
     };
     static Gender = class {
+        static MALE = class {
+            static value = "MALE";
+            static label = "Nam";
+        }
+        static FEMALE = class {
+            static value = "FEMALE";
+            static label = "Nữ";
+        }
         static List = [
-            { label: "Nam", value: true },
-            { label: "Nữ", value: false },
+            { label: "Nam", value: "MALE" },
+            { label: "Nữ", value: "FEMALE" },
         ]
     }
 };

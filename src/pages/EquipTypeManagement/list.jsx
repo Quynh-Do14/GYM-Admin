@@ -38,7 +38,7 @@ const ListEquipTypeManagement = () => {
         const param = {
             page: page - 1,
             size: size,
-            // name: name,
+            name: name,
             // startDate: startDate,
             // endDate: endDate,
         }

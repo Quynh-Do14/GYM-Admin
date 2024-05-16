@@ -46,7 +46,7 @@ class EmployeeService {
         setLoading(true)
         try {
             return await RequestService
-                .post(Endpoint.Employee.Add,
+                .postForm(Endpoint.Employee.Add,
                     data
                 )
                 .then(response => {
@@ -69,7 +69,7 @@ class EmployeeService {
         setLoading(true)
         try {
             return await RequestService
-                .put(`${Endpoint.Employee.Update}/${id}`,
+                .putForm(`${Endpoint.Employee.Update}/${id}`,
                     data
                 )
                 .then(response => {

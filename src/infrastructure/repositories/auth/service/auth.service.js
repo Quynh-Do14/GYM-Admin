@@ -87,6 +87,21 @@ class AuthService {
     };
 
 
+    async profile(setLoading) {
+        setLoading(true)
+        try {
+            return await RequestService.
+                get(Endpoint.Auth.Profile).then(response => {
+                    return response;
+                });
+        }
+        catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    }
+
     // async register(data, setLoading) {
     //     setLoading(true)
     //     try {

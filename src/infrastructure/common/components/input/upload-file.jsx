@@ -13,7 +13,6 @@ function UploadAvatar(props) {
     const handleChange = (info) => {
         if (info.file) {
             getBase64(info.file, (url) => {
-                console.log("info.file", info.file);
                 setImageUrl(url);
                 setAvatar(info.file);
             });

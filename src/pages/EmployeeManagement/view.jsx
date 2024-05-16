@@ -13,6 +13,8 @@ import employeeService from '../../infrastructure/repositories/employee/service/
 import { WarningMessage } from '../../infrastructure/common/components/toast/notificationToast';
 import { convertDate } from '../../infrastructure/helper/helper';
 import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
+import Constants from '../../core/common/constant';
+import InputSelectCommon from '../../infrastructure/common/components/input/select-common';
 
 const ViewEmployeeManagement = () => {
     const [validate, setValidate] = useState({});
@@ -72,6 +74,7 @@ const ViewEmployeeManagement = () => {
     useEffect(() => {
         if (detailEmployee) {
             setDataEmployee({
+                image: detailEmployee.image,
                 avatar: detailEmployee.avatar,
                 name: detailEmployee.name,
                 email: detailEmployee.email,
@@ -83,7 +86,7 @@ const ViewEmployeeManagement = () => {
                 lastName: detailEmployee.lastName,
                 sdt: detailEmployee.sdt,
                 address: detailEmployee.address,
-                position: detailEmployee.position,
+                position: detailEmployee.position?.id,
                 startWork: detailEmployee.startWork
             });
         };
@@ -95,9 +98,10 @@ const ViewEmployeeManagement = () => {
             await employeeService.updateEmployee(
                 param.id,
                 {
+                    image: avatar,
                     name: dataEmployee.name,
                     email: dataEmployee.email,
-                    dob: convertDate(dataEmployee.dob),
+                    dob: dataEmployee.dob !== detailEmployee.dob ? convertDate(dataEmployee.dob) : dataEmployee.dob,
                     sex: dataEmployee.sex,
                     role: dataEmployee.role,
                     cccd: dataEmployee.cccd,
@@ -105,8 +109,10 @@ const ViewEmployeeManagement = () => {
                     lastName: dataEmployee.lastName,
                     sdt: dataEmployee.sdt,
                     address: dataEmployee.address,
-                    position: dataEmployee.position,
-                    startWork: convertDate(dataEmployee.startWork)
+                    position: {
+                        id: dataEmployee.position
+                    },
+                    startWork: dataEmployee.startWork !== detailEmployee.startWork ? convertDate(dataEmployee.startWork) : dataEmployee.startWork,
                 },
                 onBack,
                 setLoading
@@ -116,15 +122,16 @@ const ViewEmployeeManagement = () => {
             WarningMessage("Nhập thiếu thông tin", "Vui lòng nhập đầy đủ thông tin")
         };
     };
+    console.log("dataEmployee", dataEmployee.position);
     return (
         <MainLayout breadcrumb={"Quản lý ca làm việc"} title={"Xem thông tin ca làm việc"} redirect={ROUTE_PATH.EMPLOYEE}>
-            <div className='main-page h-100 flex-1 auto bg-white px-4 py-8'>
-                <div className='bg-white'>
+            <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
+                <div className='bg-white scroll-auto'>
                     <Row>
                         <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
                             <div className='legend-title'>Cập nhật ảnh</div>
                             <UploadAvatar
-                                attributeImg={dataEmployee.avatar}
+                                attributeImg={dataEmployee.image}
                                 imageUrl={imageUrl}
                                 setAvatar={setAvatar}
                                 setImageUrl={setImageUrl}
@@ -170,10 +177,11 @@ const ViewEmployeeManagement = () => {
                                         validate={validate}
                                         setValidate={setValidate}
                                         submittedTime={submittedTime}
+                                        disabledToDate={false}
                                     />
                                 </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                    <InputSelectGenderCommon
+                                    <InputSelectCommon
                                         label={"Giới tính"}
                                         attribute={"sex"}
                                         isRequired={true}
@@ -183,6 +191,7 @@ const ViewEmployeeManagement = () => {
                                         validate={validate}
                                         setValidate={setValidate}
                                         submittedTime={submittedTime}
+                                        listDataOfItem={Constants.Gender.List}
                                     />
                                 </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>

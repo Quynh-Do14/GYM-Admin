@@ -6,11 +6,12 @@ import { MessageError } from '../controls/MessageError';
 import { validateFields } from '../../../helper/helper';
 import dayjs from 'dayjs';
 
-const InputDateCommon = (props) => {
+const { RangePicker } = DatePicker;
+
+const InputRangeDateCommon = (props) => {
     const {
         label,
         attribute,
-        data,
         setData,
         validate,
         setValidate,
@@ -19,22 +20,9 @@ const InputDateCommon = (props) => {
         dataAttribute,
         submittedTime,
         disabledToDate = null,
-        showTime = false,
-        showHour = false,
     } = props;
     const [value, setValue] = useState("");
-
     const disabledDate = (current) => {
-        if (attribute == "bookingTime") {
-            if (data?.endTime) {
-                return current && current > dayjs(data?.endTime).startOf("day");
-            }
-        }
-        else if (attribute == "endTime") {
-            if (data?.bookingTime) {
-                return current && current < dayjs(data?.bookingTime).startOf("day");
-            }
-        }
         if (disabledToDate == true) {
             return current && current < moment().startOf('day');
         }
@@ -58,11 +46,11 @@ const InputDateCommon = (props) => {
             validateFields(isImplicitChange, attribute, !value, setValidate, validate, !value ? `Vui lòng nhập ${labelLower}` : "");
         }
     }
-    useEffect(() => {
-        if (dataAttribute) {
-            setValue(dayjs(dataAttribute, "DD-MM-YYYY HH:mm:ss") || null);
-        }
-    }, [dataAttribute]);
+    // useEffect(() => {
+    //     if (dataAttribute) {
+    //         setValue(dayjs(dataAttribute, "DD-MM-YYYY HH:mm:ss") || null);
+    //     }
+    // }, [dataAttribute]);
 
     useEffect(() => {
         if (submittedTime != null) {
@@ -80,7 +68,7 @@ const InputDateCommon = (props) => {
                 </span>
             </div>
             <div>
-                <DatePicker
+                <RangePicker
                     allowClear={false}
                     size="middle"
                     className='w-full input-date-common'
@@ -88,11 +76,11 @@ const InputDateCommon = (props) => {
                     placeholder={`Chọn ${label}`}
                     // onChange={(values) => setValue(values)}
                     onChange={onChange}
-                    disabledDate={disabledDate}
+                    // disabledDate={disabledDate}
                     disabled={disabled}
-                    format={`${showHour ? "DD/MM/YYYY hh:mm:ss" : "DD/MM/YYYY"}`}
+                    format="DD/MM/YYYY"
+                    showTime
                     onBlur={() => onBlur(false)}
-                    showTime={showTime}
                 />
 
                 <MessageError isError={validate[attribute]?.isError || false} message={validate[attribute]?.message || ""} />
@@ -101,4 +89,4 @@ const InputDateCommon = (props) => {
     );
 
 };
-export default InputDateCommon;
+export default InputRangeDateCommon;
