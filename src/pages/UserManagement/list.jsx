@@ -36,14 +36,10 @@ const ListShiftManagement = () => {
 
     const onGetUserAsync = async ({ name = "", size = pageSize, page = currentPage, startDate = "", endDate = "" }) => {
         const param = {
-            sortBy: "-createdDate",
-            page: page,
+            page: page - 1,
             size: size,
             name: name,
-            roleName: undefined,
-            startDate: startDate,
-            endDate: endDate,
-            status: undefined,
+
         }
         try {
             await userService.getUser(

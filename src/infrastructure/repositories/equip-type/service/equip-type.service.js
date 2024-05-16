@@ -12,7 +12,6 @@ class EquipTypeService {
                     ...params
                 })
                 .then(response => {
-                    console.log("response", response);
                     if (response) {
                         return response
                     }

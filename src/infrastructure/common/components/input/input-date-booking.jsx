@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { Col, DatePicker, Row } from 'antd';
 import moment from 'moment';
 import { MessageError } from '../controls/MessageError';
-import { validateFields } from '../../../helper/helper';
+import { convertDate, validateFields } from '../../../helper/helper';
 import dayjs from 'dayjs';
 
-const InputDateCommon = (props) => {
+const InputDateBookingCommon = (props) => {
     const {
         label,
         attribute,
@@ -60,7 +60,7 @@ const InputDateCommon = (props) => {
     }
     useEffect(() => {
         if (dataAttribute) {
-            setValue(dayjs(dataAttribute, "DD-MM-YYYY HH:mm:ss") || null);
+            setValue(dayjs(convertDate(dataAttribute), "DD-MM-YYYY HH:mm:ss") || null);
         }
     }, [dataAttribute]);
 
@@ -101,4 +101,4 @@ const InputDateCommon = (props) => {
     );
 
 };
-export default InputDateCommon;
+export default InputDateBookingCommon;

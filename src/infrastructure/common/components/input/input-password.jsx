@@ -1,12 +1,11 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Input } from 'antd';
 import "../../../../assets/styles/components/input.css"
-import { validateCMND, validateEmail, validateFormInputNumber, validatePhoneNumber } from '../../../helper/validate';
 import { validateFields } from '../../../helper/helper';
+import { validateCMND, validateEmail, validatePhoneNumber } from '../../../helper/validate';
 import { MessageError } from '../controls/MessageError';
 
-const InputTextCommon = (props) => {
+const InputPasswordCommon = (props) => {
     const {
         label,
         attribute,
@@ -14,7 +13,6 @@ const InputTextCommon = (props) => {
         setData,
         dataAttribute,
         disabled = false,
-        size,
         validate,
         setValidate,
         submittedTime
@@ -68,13 +66,13 @@ const InputTextCommon = (props) => {
                     </span>
                 </div>
                 <div>
-                    <Input
-                        size={size ? size : "middle"}
+                    <Input.Password
+                        size={"middle"}
                         value={value ? value : ""}
                         onChange={onChange}
                         onBlur={() => onBlur(false)}
                         disabled={disabled}
-                        placeholder={`Nhập ${label}`}
+                        placeholder={`Nhập ${labelLower}`}
                     />
                     <MessageError isError={validate[attribute]?.isError || false} message={validate[attribute]?.message || ""} />
                 </div>
@@ -82,4 +80,4 @@ const InputTextCommon = (props) => {
         </div>
     )
 };
-export default InputTextCommon;
+export default InputPasswordCommon;

@@ -25,6 +25,12 @@ import ListUserManagement from "../../pages/UserManagement/list";
 import ViewShiftManagement from "../../pages/UserManagement/view";
 import ViewUserManagement from "../../pages/UserManagement/view";
 import MainLayout from "../common/layouts/MainLayout";
+import ListBookingManagement from "../../pages/BookingManagement/list";
+import AddBookingManagement from "../../pages/BookingManagement/add";
+import ViewBookingManagement from "../../pages/BookingManagement/view";
+import ListPackageManagement from "../../pages/PackageManagement/list";
+import AddPackageManagement from "../../pages/PackageManagement/add";
+import ViewPackageManagement from "../../pages/PackageManagement/view";
 
 export const privateRoutes = [
     {
@@ -131,18 +137,18 @@ export const privateRoutes = [
         private: true,
     },
     {
-        path: ROUTE_PATH.MEMBER_CARD,
-        component: ListMemberCardManagement,
+        path: ROUTE_PATH.PACKAGE,
+        component: ListPackageManagement,
         private: true,
     },
     {
-        path: ROUTE_PATH.ADD_MEMBER_CARD,
-        component: AddMemberCardManagement,
+        path: ROUTE_PATH.ADD_PACKAGE,
+        component: AddPackageManagement,
         private: true,
     },
     {
-        path: ROUTE_PATH.VIEW_MEMBER_CARD,
-        component: ViewMemberCardManagement,
+        path: ROUTE_PATH.VIEW_PACKAGE,
+        component: ViewPackageManagement,
         private: true,
     },
     {
@@ -158,6 +164,21 @@ export const privateRoutes = [
     {
         path: ROUTE_PATH.VIEW_MEMBER,
         component: ViewMemberManagement,
+        private: true,
+    },
+    {
+        path: ROUTE_PATH.BOOKING,
+        component: ListBookingManagement,
+        private: true,
+    },
+    {
+        path: ROUTE_PATH.ADD_BOOKING,
+        component: AddBookingManagement,
+        private: true,
+    },
+    {
+        path: ROUTE_PATH.VIEW_BOOKING,
+        component: ViewBookingManagement,
         private: true,
     },
 ]

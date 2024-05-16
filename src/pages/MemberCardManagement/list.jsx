@@ -42,13 +42,13 @@ const ListMemberCardManagement = () => {
             // endDate: endDate,
         }
         try {
-            await memberCardService.getMemberCard(
-                param,
-                setLoading
-            ).then((res) => {
-                setDataMemberCard(res.content)
-                setTotal(res.totalElements)
-            })
+            // await memberCardService.getMemberCard(
+            //     param,
+            //     setLoading
+            // ).then((res) => {
+            //     setDataMemberCard(res.content)
+            //     setTotal(res.totalElements)
+            // })
         }
         catch (error) {
             console.error(error)

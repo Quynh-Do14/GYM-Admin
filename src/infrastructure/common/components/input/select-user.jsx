@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Select } from "antd";
 import Constants from "../../../../core/common/constant";
 import { MessageError } from "../controls/MessageError";
-import { validateFields } from "../../../helper/helper";
-const InputSelectCommon = (props) => {
+import { convertTimeParams, validateFields } from "../../../helper/helper";
+import bookingService from "../../../repositories/booking/service/booking.service";
+import userService from "../../../repositories/user-management/service/user.service";
+const InputSelectUserCommon = (props) => {
     const {
         dataAttribute,
         setData,
@@ -18,13 +20,33 @@ const InputSelectCommon = (props) => {
     } = props;
 
     const [value, setValue] = useState("");
-
+    const [listUser, setListUser] = useState([]);
     const onChange = async (val) => {
         setValue(val || "");
         setData({
             [attribute]: val
         });
     };
+    const getUserAsync = async () => {
+        const params = {
+        }
+        try {
+            await userService.getUser(
+                params,
+                () => { }
+            ).then((response) => {
+                if (response) {
+                    setListUser(response.content)
+                }
+            })
+        } catch (error) {
+            console.error(error);
+
+        }
+    }
+    useEffect(() => {
+        getUserAsync().then(() => { })
+    }, [])
 
     let labelLower = label.toLowerCase();
     const validateBlur = (isImplicitChange = false) => {
@@ -67,19 +89,19 @@ const InputSelectCommon = (props) => {
                         value={value}
                         listHeight={120}
                         onChange={onChange}
-                        onBlur={onBlur}
+                        onBlur={() => onBlur(false)}
                         placeholder={`Chọn ${label}`}
                         getPopupContainer={trigger => trigger.parentNode}
                     >
                         {
-                            listDataOfItem && listDataOfItem.length && listDataOfItem.map((item, index) => {
+                            listUser && listUser.length && listUser.map((item, index) => {
                                 return (
                                     <Select.Option
                                         key={index}
-                                        value={item.value}
-                                        title={item.label}
+                                        value={item.id}
+                                        title={item.name}
                                     >
-                                        {item.label}
+                                        {item.name}
                                     </Select.Option>
                                 )
                             })
@@ -91,4 +113,4 @@ const InputSelectCommon = (props) => {
         </div>
     );
 }
-export default InputSelectCommon;
+export default InputSelectUserCommon;

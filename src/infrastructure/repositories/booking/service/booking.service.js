@@ -3,12 +3,12 @@ import { FailMessage, SuccessMessage } from "../../../common/components/toast/no
 import { RequestService } from "../../../utils/response";
 import { saveToken } from "../../../utils/storage";
 
-class PositionService {
-    async getPosition(params, setLoading) {
+class BookingService {
+    async getBooking(params, setLoading) {
         setLoading(true)
         try {
             return await RequestService
-                .get(Endpoint.Position.Get, {
+                .get(Endpoint.Booking.Get, {
                     ...params
                 })
                 .then(response => {
@@ -24,11 +24,11 @@ class PositionService {
             setLoading(false);
         }
     };
-    async getPositionById(id, setLoading) {
+    async getBookingById(id, setLoading) {
         setLoading(true)
         try {
             return await RequestService
-                .get(`${Endpoint.Position.Get}/${id}`)
+                .get(`${Endpoint.Booking.GetById}/${id}`)
                 .then(response => {
                     if (response) {
                         return response
@@ -42,11 +42,11 @@ class PositionService {
             setLoading(false);
         }
     };
-    async addPosition(data, onBack, setLoading) {
+    async addBooking(data, onBack, setLoading) {
         setLoading(true)
         try {
             return await RequestService
-                .post(Endpoint.Position.Add,
+                .post(Endpoint.Booking.Add,
                     data
                 )
                 .then(response => {
@@ -59,23 +59,17 @@ class PositionService {
                     return response;
                 });
         } catch (error) {
-            // if (error?.response?.data?.errors[0]?.defaultMessage) {
-            //     FailMessage(messageConfig(error?.response?.data?.errors[0]?.defaultMessage), "")
-            // }
-            // if (error.response.data.message) {
-            //     FailMessage(messageConfig(error.response.data.message), "")
-            // }
-            FailMessage("Thêm mới không thành công", "Xem lại thông tin thêm mới")
+            FailMessage("Thêm mới không thành công", "Vui lòng kiểm tra thông tin")
             console.error(error)
         } finally {
             setLoading(false);
         }
     }
-    async updatePosition(id, data, onBack, setLoading) {
+    async updateBooking(id, data, onBack, setLoading) {
         setLoading(true)
         try {
             return await RequestService
-                .put(`${Endpoint.Position.Update}/${id}`,
+                .put(`${Endpoint.Booking.Update}/${id}`,
                     data
                 )
                 .then(response => {
@@ -94,11 +88,11 @@ class PositionService {
             setLoading(false);
         }
     }
-    async deletePosition(id, setLoading) {
+    async deleteBooking(id, setLoading) {
         setLoading(true)
         try {
             return await RequestService
-                .delete(`${Endpoint.Position.Delete}/${id}`)
+                .delete(`${Endpoint.Booking.Delete}/${id}`)
                 .then(response => {
                     if (response) {
                         SuccessMessage("Xóa thành công", "")
@@ -108,6 +102,23 @@ class PositionService {
                     return response;
                 });
         } catch (error) {
+            FailMessage("Xóa không thành công", "Vui lòng kiểm tra thông tin")
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    }
+    async getEmloyeePT(params, setLoading) {
+        setLoading(true)
+        try {
+            return await RequestService.
+                get(Endpoint.Booking.GetPT,
+                    { ...params }
+                ).then(response => {
+                    return response;
+                });
+        }
+        catch (error) {
             console.error(error)
         } finally {
             setLoading(false);
@@ -115,4 +126,4 @@ class PositionService {
     }
 }
 
-export default new PositionService();
+export default new BookingService();

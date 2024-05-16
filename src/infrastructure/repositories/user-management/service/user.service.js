@@ -7,7 +7,7 @@ class UserService {
         setLoading(true)
         try {
             return await RequestService
-                .get(Endpoint.User.User, {
+                .get(Endpoint.User.Get, {
                     ...params
                 })
                 .then(response => {
@@ -18,15 +18,6 @@ class UserService {
                     return response;
                 });
         } catch (error) {
-            // if (error?.response?.data?.errors[0]?.defaultMessage) {
-            //     FailMessage(messageConfig(error?.response?.data?.errors[0]?.defaultMessage), "")
-            // }
-            // if (error.response.data.message) {
-            //     FailMessage(messageConfig(error.response.data.message), "")
-            // }
-            // else {
-            //     FailMessage("Đăng nhập không thành công", "Tài khoản của bạn chưa đúng")
-            // }
             console.error(error)
         } finally {
             setLoading(false);

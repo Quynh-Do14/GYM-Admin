@@ -7,14 +7,12 @@ import { ButtonCommon } from '../../infrastructure/common/components/button/butt
 import { FullPageLoading } from '../../infrastructure/common/components/controls/loading';
 import { useNavigate } from 'react-router-dom';
 import { WarningMessage } from '../../infrastructure/common/components/toast/notificationToast';
-import InputSelectGenderCommon from '../../infrastructure/common/components/input/select-category';
+import equipTypeService from '../../infrastructure/repositories/equip-type/service/equip-type.service';
 import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
-import memberService from '../../infrastructure/repositories/member/service/member.service';
-import InputSelectMemberCardCommon from '../../infrastructure/common/components/input/select-member-card';
-import Constants from '../../core/common/constant';
-import InputSelectCommon from '../../infrastructure/common/components/input/select-common';
+import packageService from '../../infrastructure/repositories/package/service/package.service';
+import InputNumberCommon from '../../infrastructure/common/components/input/input-number';
 
-const AddMemberManagement = () => {
+const AddPackageManagement = () => {
     const [validate, setValidate] = useState({});
     const [loading, setLoading] = useState(false);
     const [submittedTime, setSubmittedTime] = useState();
@@ -22,16 +20,16 @@ const AddMemberManagement = () => {
     const [avatar, setAvatar] = useState(null);
 
     const [_data, _setData] = useState({});
-    const dataMember = _data;
+    const dataPackage = _data;
 
     const navigate = useNavigate();
 
     const onBack = () => {
-        navigate(ROUTE_PATH.MEMBER)
+        navigate(ROUTE_PATH.PACKAGE)
     };
-    const setDataMember = (data) => {
-        Object.assign(dataMember, { ...data });
-        _setData({ ...dataMember });
+    const setDataPackage = (data) => {
+        Object.assign(dataPackage, { ...data });
+        _setData({ ...dataPackage });
     };
 
     const isValidData = () => {
@@ -48,17 +46,14 @@ const AddMemberManagement = () => {
         return allRequestOK;
     };
 
-    const onAddMember = async () => {
+    const onAddPackage = async () => {
         await setSubmittedTime(Date.now());
         if (isValidData()) {
-            await memberService.addMember({
-                name: dataMember.name,
-                email: dataMember.email,
-                sex: dataMember.sex,
-                role: dataMember.role,
-                cccd: dataMember.cccd,
-                phone: dataMember.phone,
-                status: true,
+            await packageService.addPackages({
+                image: avatar,
+                name: dataPackage.name,
+                price: dataPackage.price,
+                duration: dataPackage.duration,
             },
                 onBack,
                 setLoading
@@ -70,14 +65,14 @@ const AddMemberManagement = () => {
     };
 
     return (
-        <MainLayout breadcrumb={"Quản lý thành viên"} title={"Thêm thành viên"} redirect={ROUTE_PATH.MEMBER}>
+        <MainLayout breadcrumb={"Quản lý gói thành viên"} title={"Thêm gói thành viên"} redirect={ROUTE_PATH.PACKAGE}>
             <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
                 <div className='bg-white scroll-auto'>
                     <Row>
                         <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
                             <div className='legend-title'>Thêm mới ảnh</div>
                             <UploadAvatar
-                                attributeImg={dataMember.avatar}
+                                attributeImg={dataPackage.image}
                                 imageUrl={imageUrl}
                                 setAvatar={setAvatar}
                                 setImageUrl={setImageUrl}
@@ -86,66 +81,13 @@ const AddMemberManagement = () => {
                         <Col xs={24} sm={24} md={12} lg={16} xl={18} xxl={19} className='border-add'>
                             <div className='legend-title'>Thêm thông tin mới</div>
                             <Row gutter={[30, 0]}>
-                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                <Col span={24}>
                                     <InputTextCommon
-                                        label={"Tên thành viên"}
+                                        label={"Gói thành viên"}
                                         attribute={"name"}
                                         isRequired={true}
-                                        dataAttribute={dataMember.name}
-                                        setData={setDataMember}
-                                        disabled={false}
-                                        validate={validate}
-                                        setValidate={setValidate}
-                                        submittedTime={submittedTime}
-                                    />
-                                </Col>
-                                {/* <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                    <InputSelectMemberCardCommon
-                                        label={"Thẻ thành viên"}
-                                        attribute={"memberCard"}
-                                        isRequired={true}
-                                        dataAttribute={dataMember.memberCard}
-                                        setData={setDataMember}
-                                        disabled={false}
-                                        validate={validate}
-                                        setValidate={setValidate}
-                                        submittedTime={submittedTime}
-                                    />
-                                </Col> */}
-                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                    <InputTextCommon
-                                        label={"Email"}
-                                        attribute={"email"}
-                                        isRequired={true}
-                                        dataAttribute={dataMember.email}
-                                        setData={setDataMember}
-                                        disabled={false}
-                                        validate={validate}
-                                        setValidate={setValidate}
-                                        submittedTime={submittedTime}
-                                    />
-                                </Col>
-                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                    <InputSelectCommon
-                                        label={"Giới tính"}
-                                        attribute={"sex"}
-                                        isRequired={true}
-                                        dataAttribute={dataMember.sex}
-                                        setData={setDataMember}
-                                        disabled={false}
-                                        validate={validate}
-                                        setValidate={setValidate}
-                                        submittedTime={submittedTime}
-                                        listDataOfItem={Constants.Gender.List}
-                                    />
-                                </Col>
-                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                    <InputTextCommon
-                                        label={"Căn cước công dân"}
-                                        attribute={"cccd"}
-                                        isRequired={true}
-                                        dataAttribute={dataMember.cccd}
-                                        setData={setDataMember}
+                                        dataAttribute={dataPackage.name}
+                                        setData={setDataPackage}
                                         disabled={false}
                                         validate={validate}
                                         setValidate={setValidate}
@@ -154,17 +96,31 @@ const AddMemberManagement = () => {
                                 </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                                     <InputTextCommon
-                                        label={"Số điện thoại"}
-                                        attribute={"phone"}
+                                        label={"Giá"}
+                                        attribute={"price"}
                                         isRequired={true}
-                                        dataAttribute={dataMember.phone}
-                                        setData={setDataMember}
+                                        dataAttribute={dataPackage.price}
+                                        setData={setDataPackage}
                                         disabled={false}
                                         validate={validate}
                                         setValidate={setValidate}
                                         submittedTime={submittedTime}
                                     />
                                 </Col>
+                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                    <InputNumberCommon
+                                        label={"Thời hạn (Ngày)"}
+                                        attribute={"duration"}
+                                        isRequired={true}
+                                        dataAttribute={dataPackage.duration}
+                                        setData={setDataPackage}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                    />
+                                </Col>
+
                             </Row>
                         </Col>
                     </Row>
@@ -176,7 +132,7 @@ const AddMemberManagement = () => {
                         <ButtonCommon onClick={onBack} classColor="blue">Quay lại</ButtonCommon>
                     </Col>
                     <Col className='mx-1'>
-                        <ButtonCommon onClick={onAddMember} classColor="orange">Thêm mới</ButtonCommon>
+                        <ButtonCommon onClick={onAddPackage} classColor="orange">Thêm mới</ButtonCommon>
                     </Col>
                 </Row>
             </div >
@@ -185,4 +141,4 @@ const AddMemberManagement = () => {
     )
 }
 
-export default AddMemberManagement
+export default AddPackageManagement

@@ -13,6 +13,8 @@ import InputSelectGenderCommon from '../../infrastructure/common/components/inpu
 import { convertDate, convertDateOnly } from '../../infrastructure/helper/helper';
 import InputSelectPositionCommon from '../../infrastructure/common/components/input/select-position';
 import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
+import InputSelectCommon from '../../infrastructure/common/components/input/select-common';
+import Constants from '../../core/common/constant';
 
 const AddEmployeeManagement = () => {
     const [validate, setValidate] = useState({});
@@ -47,11 +49,11 @@ const AddEmployeeManagement = () => {
 
         return allRequestOK;
     };
-
     const onAddEmployee = async () => {
         await setSubmittedTime(Date.now());
         if (isValidData()) {
             await employeeService.addEmployee({
+                image: avatar,
                 name: dataEmployee.name,
                 email: dataEmployee.email,
                 dob: convertDate(dataEmployee.dob),
@@ -62,7 +64,9 @@ const AddEmployeeManagement = () => {
                 lastName: dataEmployee.lastName,
                 sdt: dataEmployee.sdt,
                 address: dataEmployee.address,
-                position: dataEmployee.position,
+                position: {
+                    id: dataEmployee.position
+                },
                 startWork: convertDate(dataEmployee.startWork)
             },
                 onBack,
@@ -82,7 +86,7 @@ const AddEmployeeManagement = () => {
                         <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
                             <div className='legend-title'>Thêm mới ảnh</div>
                             <UploadAvatar
-                                attributeImg={dataEmployee.avatar}
+                                attributeImg={dataEmployee.image}
                                 imageUrl={imageUrl}
                                 setAvatar={setAvatar}
                                 setImageUrl={setImageUrl}
@@ -128,10 +132,11 @@ const AddEmployeeManagement = () => {
                                         validate={validate}
                                         setValidate={setValidate}
                                         submittedTime={submittedTime}
+                                        disabledToDate={false}
                                     />
                                 </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                    <InputSelectGenderCommon
+                                    <InputSelectCommon
                                         label={"Giới tính"}
                                         attribute={"sex"}
                                         isRequired={true}
@@ -141,6 +146,7 @@ const AddEmployeeManagement = () => {
                                         validate={validate}
                                         setValidate={setValidate}
                                         submittedTime={submittedTime}
+                                        listDataOfItem={Constants.Gender.List}
                                     />
                                 </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>

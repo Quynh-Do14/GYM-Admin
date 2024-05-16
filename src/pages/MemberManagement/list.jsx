@@ -38,7 +38,7 @@ const ListMemberManagement = () => {
         const param = {
             page: page - 1,
             size: size,
-            // name: name,
+            name: name,
             // startDate: startDate,
             // endDate: endDate,
         }
@@ -163,16 +163,33 @@ const ListMemberManagement = () => {
                     <Column
                         title={
                             <TitleTableCommon
-                                title="Thẻ thành viên"
+                                title="Email"
                                 width="200px"
                             />
                         }
-                        key={"memberCard"}
-                        dataIndex={"memberCard"}
+                        key={"user"}
+                        dataIndex={"user"}
                         render={(value, record) => {
                             return (
                                 <div>
-                                    {value?.id}
+                                    {value?.email}
+                                </div>
+                            )
+                        }}
+                    />
+                    <Column
+                        title={
+                            <TitleTableCommon
+                                title="Tên đăng nhập"
+                                width="200px"
+                            />
+                        }
+                        key={"user"}
+                        dataIndex={"user"}
+                        render={(value, record) => {
+                            return (
+                                <div>
+                                    {value?.username}
                                 </div>
                             )
                         }}
@@ -197,7 +214,7 @@ const ListMemberManagement = () => {
                     <Column
                         title={
                             <TitleTableCommon
-                                title="CMT"
+                                title="CCCD"
                                 width="200px"
                             />
                         }
@@ -214,16 +231,7 @@ const ListMemberManagement = () => {
                         key={"phone"}
                         dataIndex={"phone"}
                     />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="Email"
-                                width="200px"
-                            />
-                        }
-                        key={"email"}
-                        dataIndex={"email"}
-                    />
+
                     <Column
                         title={
                             <TitleTableCommon

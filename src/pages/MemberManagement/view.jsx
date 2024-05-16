@@ -11,6 +11,8 @@ import { WarningMessage } from '../../infrastructure/common/components/toast/not
 import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
 import InputSelectMemberCardCommon from '../../infrastructure/common/components/input/select-member-card';
 import memberService from '../../infrastructure/repositories/member/service/member.service';
+import InputSelectCommon from '../../infrastructure/common/components/input/select-common';
+import Constants from '../../core/common/constant';
 
 const ViewMemberManagement = () => {
     const [validate, setValidate] = useState({});
@@ -72,7 +74,7 @@ const ViewMemberManagement = () => {
             setDataMember({
                 avatar: detailMember.avatar,
                 name: detailMember.name,
-                email: detailMember.email,
+                email: detailMember.user?.email,
                 sex: detailMember.sex,
                 cccd: detailMember.cccd,
                 phone: detailMember.phone,
@@ -88,9 +90,6 @@ const ViewMemberManagement = () => {
                 param.id,
                 {
                     name: dataMember.name,
-                    memberCard: {
-                        id: dataMember.memberCard
-                    },
                     email: dataMember.email,
                     sex: dataMember.sex,
                     role: dataMember.role,
@@ -136,7 +135,7 @@ const ViewMemberManagement = () => {
                                         submittedTime={submittedTime}
                                     />
                                 </Col>
-                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                {/* <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                                     <InputSelectMemberCardCommon
                                         label={"Thẻ thành viên"}
                                         attribute={"memberCard"}
@@ -148,7 +147,7 @@ const ViewMemberManagement = () => {
                                         setValidate={setValidate}
                                         submittedTime={submittedTime}
                                     />
-                                </Col>
+                                </Col> */}
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                                     <InputTextCommon
                                         label={"Email"}
@@ -156,14 +155,14 @@ const ViewMemberManagement = () => {
                                         isRequired={true}
                                         dataAttribute={dataMember.email}
                                         setData={setDataMember}
-                                        disabled={false}
+                                        disabled={true}
                                         validate={validate}
                                         setValidate={setValidate}
                                         submittedTime={submittedTime}
                                     />
                                 </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
-                                    <InputSelectGenderCommon
+                                    <InputSelectCommon
                                         label={"Giới tính"}
                                         attribute={"sex"}
                                         isRequired={true}
@@ -173,6 +172,7 @@ const ViewMemberManagement = () => {
                                         validate={validate}
                                         setValidate={setValidate}
                                         submittedTime={submittedTime}
+                                        listDataOfItem={Constants.Gender.List}
                                     />
                                 </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>

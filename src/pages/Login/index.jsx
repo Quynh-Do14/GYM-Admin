@@ -6,10 +6,35 @@ import { isTokenStoraged } from '../../infrastructure/utils/storage';
 import { ROUTE_PATH } from '../../core/common/appRouter';
 import { useNavigate } from 'react-router-dom';
 import { FullPageLoading } from '../../infrastructure/common/components/controls/loading';
+import { WarningMessage } from '../../infrastructure/common/components/toast/notificationToast';
+import InputTextCommon from '../../infrastructure/common/components/input/input-text';
+import InputPasswordCommon from '../../infrastructure/common/components/input/input-password';
 const LoginPage = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [validate, setValidate] = useState({});
     const [loading, setLoading] = useState(false);
+    const [submittedTime, setSubmittedTime] = useState();
+
+    const [_data, _setData] = useState({});
+    const dataLogin = _data;
+
+    const setDataLogin = (data) => {
+        Object.assign(dataLogin, { ...data });
+        _setData({ ...dataLogin });
+    };
+
+    const isValidData = () => {
+        let allRequestOK = true;
+
+        setValidate({ ...validate });
+
+        Object.values(validate).forEach((it) => {
+            if (it.isError === true) {
+                allRequestOK = false;
+            }
+        });
+
+        return allRequestOK;
+    };
 
     const navigate = useNavigate();
 
@@ -21,21 +46,27 @@ const LoginPage = () => {
     }, [])
 
     const onLogin = async () => {
-        try {
-            await authService.login(
-                {
-                    username: username,
-                    password: password,
-                },
-                setLoading
-            ).then((response) => {
-                if (response) {
-                    navigate(ROUTE_PATH.MAINLAYOUT)
-                }
-            });
-        } catch (error) {
-            console.error(error);
+        await setSubmittedTime(new Date())
+        if (isValidData()) {
+            try {
+                await authService.login(
+                    {
+                        username: dataLogin.username,
+                        password: dataLogin.password,
+                    },
+                    setLoading
+                ).then((response) => {
+                    if (response) {
+                        navigate(ROUTE_PATH.MAINLAYOUT)
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+            }
         }
+        else {
+            WarningMessage("Nhập thiếu thông tin", "Vui lòng nhập đầy đủ thông tin")
+        };
     }
 
     return (
@@ -44,25 +75,36 @@ const LoginPage = () => {
                 <div className={"container"} id="container">
                     <div className="form-container sign-in-container">
                         <div className='form-flex'>
-                            <h1 className='mb-4'>Đăng nhập</h1>
+                            <h1 style={{ marginBottom: 12 }}>Quản lý phòng GYM</h1>
                             <Row gutter={[10, 10]}>
                                 <Col span={24}>
-                                    <Input
-                                        size={"middle"}
-                                        value={username ? username : ""}
-                                        onChange={(e) => setUsername(e.target.value)}
-
+                                    <InputTextCommon
+                                        label={"Tên đăng nhập"}
+                                        attribute={"username"}
+                                        isRequired={true}
+                                        dataAttribute={dataLogin.username}
+                                        setData={setDataLogin}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
                                     />
                                 </Col>
                                 <Col span={24}>
-                                    <Input.Password
-                                        size={"middle"}
-                                        value={password ? password : ""}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                    <InputPasswordCommon
+                                        label={"Mật khẩu"}
+                                        attribute={"password"}
+                                        isRequired={true}
+                                        dataAttribute={dataLogin.password}
+                                        setData={setDataLogin}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
                                     />
                                 </Col>
                                 <Col span={24}>
-                                    <button className='w-full' onClick={onLogin}>Đăng nhập</button>
+                                    <button className='w-full cursor-pointer mt-4' onClick={onLogin}>Đăng nhập</button>
                                 </Col>
                             </Row>
                         </div>
