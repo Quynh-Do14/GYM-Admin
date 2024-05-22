@@ -16,15 +16,16 @@ import { ButtonFilterCommon } from '../../infrastructure/common/components/butto
 import { ROUTE_PATH } from '../../core/common/appRouter'
 import { useNavigate } from 'react-router-dom';
 import DialogConfirmCommon from '../../infrastructure/common/components/modal/dialogConfirm'
-import memberService from '../../infrastructure/repositories/member/service/member.service'
+import branchService from '../../infrastructure/repositories/branch/service/branch.service'
 
 let timeout
-const ListMemberManagement = () => {
-    const [listMember, setListMember] = useState([])
+const ListBranchManagement = () => {
+    const [listEmployee, setListEmployee] = useState([])
     const [total, setTotal] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [searchText, setSearchText] = useState("");
+    const [searchAddress, setSearchAddress] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [idSelected, setIdSelected] = useState(null);
@@ -34,20 +35,19 @@ const ListMemberManagement = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const onGetMemberAsync = async ({ name = "", size = pageSize, page = currentPage, startDate = "", endDate = "" }) => {
+    const onGetBranchAsync = async ({ name = "", address = "", size = pageSize, page = currentPage }) => {
         const param = {
             page: page - 1,
+            address: address,
             size: size,
             name: name,
-            // startDate: startDate,
-            // endDate: endDate,
         }
         try {
-            await memberService.getMember(
+            await branchService.getBranch(
                 param,
                 setLoading
             ).then((res) => {
-                setListMember(res.content)
+                setListEmployee(res.content)
                 setTotal(res.totalElements)
             })
         }
@@ -56,29 +56,38 @@ const ListMemberManagement = () => {
         }
     }
 
-    const onSearch = async (name = "", size = pageSize, page = 1, startDate = "", endDate = "") => {
-        await onGetMemberAsync({ name: name, size: size, page: page, startDate: startDate, endDate: endDate });
+    const onSearch = async (name = "", address = "", size = pageSize, page = 1,) => {
+        await onGetBranchAsync({ name: name, address: address, size: size, page: page });
     };
 
     const onChangeSearchText = (e) => {
         setSearchText(e.target.value);
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-            onSearch(e.target.value, pageSize, currentPage, startDate, endDate).then((_) => { });
+            onSearch(e.target.value, searchAddress, pageSize, currentPage).then((_) => { });
         }, Constants.DEBOUNCE_SEARCH);
     };
+
+    const onChangeSearchAddress = (e) => {
+        setSearchAddress(e.target.value);
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            onSearch(searchText, e.target.value, pageSize, currentPage).then((_) => { });
+        }, Constants.DEBOUNCE_SEARCH);
+    };
+
 
     useEffect(() => {
         onSearch().then(_ => { });
     }, [])
     const onChangePage = async (value) => {
         setCurrentPage(value)
-        await onSearch(searchText, pageSize, value, startDate, endDate).then(_ => { });
+        await onSearch(searchText, searchAddress, pageSize, value).then(_ => { });
     }
     const onPageSizeChanged = async (value) => {
         setPageSize(value)
         setCurrentPage(1)
-        await onSearch(searchText, value, 1, startDate, endDate).then(_ => { });
+        await onSearch(searchText, searchAddress, value, 1).then(_ => { });
     }
 
     const onOpenModalDelete = (id) => {
@@ -89,10 +98,10 @@ const ListMemberManagement = () => {
     const onCloseModalDelete = () => {
         setIsDeleteModal(false);
     };
-    const onDeleteMember = async () => {
+    const onDeleteBranch = async () => {
         setIsDeleteModal(false);
         try {
-            await memberService.deleteMember(
+            await branchService.deleteBranch(
                 idSelected,
                 setLoading
             ).then((res) => {
@@ -106,10 +115,10 @@ const ListMemberManagement = () => {
         }
     }
     const onNavigate = (id) => {
-        navigate(`${(ROUTE_PATH.VIEW_MEMBER).replace(`${Constants.UseParams.Id}`, "")}${id}`);
+        navigate(`${(ROUTE_PATH.VIEW_BRANCH).replace(`${Constants.UseParams.Id}`, "")}${id}`);
     }
     return (
-        <MainLayout breadcrumb={"Quản lý thành viên"} title={"Danh sách thành viên"} redirect={""}>
+        <MainLayout breadcrumb={"Quản lý chi nhánh"} title={"Danh sách chi nhánh"} redirect={""}>
             <div className='flex flex-col header-page'>
                 <Row className='filter-page mb-2 py-2-5' gutter={[10, 10]} justify={"space-between"} align={"middle"}>
                     <Col xs={24} sm={24} lg={16}>
@@ -122,17 +131,25 @@ const ListMemberManagement = () => {
                                     disabled={false}
                                 />
                             </Col>
+                            <Col xs={24} sm={12} lg={8}>
+                                <InputSearchCommon
+                                    placeholder="Tìm kiếm theo địa chỉ..."
+                                    value={searchAddress}
+                                    onChange={onChangeSearchAddress}
+                                    disabled={false}
+                                />
+                            </Col>
                         </Row>
 
                     </Col>
                     <Col>
-                        <ButtonCommon icon={<PlusOutlined />} classColor="orange" onClick={() => navigate(ROUTE_PATH.ADD_MEMBER)} >Thêm mới</ButtonCommon>
+                        <ButtonCommon icon={<PlusOutlined />} classColor="orange" onClick={() => navigate(ROUTE_PATH.ADD_BRANCH)} >Thêm mới</ButtonCommon>
                     </Col>
                 </Row>
             </div>
             <div className='flex-1 overflow-auto bg-[#FFFFFF] content-page'>
                 <Table
-                    dataSource={listMember}
+                    dataSource={listEmployee}
                     pagination={false}
                     className='table-common'
                 >
@@ -150,8 +167,8 @@ const ListMemberManagement = () => {
                     <Column
                         title={
                             <TitleTableCommon
-                                title="Tên thành viên"
-                                width="200px"
+                                title="Tên chi nhánh"
+                                width="300px"
                             />
                         }
                         key={"name"}
@@ -160,75 +177,43 @@ const ListMemberManagement = () => {
                     <Column
                         title={
                             <TitleTableCommon
-                                title="Email"
+                                title="Địa chỉ"
+                                width="300px"
+                            />
+                        }
+                        key={"address"}
+                        dataIndex={"address"}
+                    />
+                    <Column
+                        title={
+                            <TitleTableCommon
+                                title="Quản lý"
                                 width="200px"
                             />
                         }
-                        key={"user"}
-                        dataIndex={"user"}
-                        render={(value, record) => {
+                        key={"manager"}
+                        dataIndex={"manager"}
+                        render={(val) => {
                             return (
-                                <div>
-                                    {value?.email}
-                                </div>
+                                <div>{val.name} </div>
                             )
                         }}
                     />
                     <Column
                         title={
                             <TitleTableCommon
-                                title="Tên đăng nhập"
-                                width="200px"
+                                title="SĐT quản lý"
+                                width="100px"
                             />
                         }
-                        key={"user"}
-                        dataIndex={"user"}
-                        render={(value, record) => {
+                        key={"manager"}
+                        dataIndex={"manager"}
+                        render={(val) => {
                             return (
-                                <div>
-                                    {value?.username}
-                                </div>
+                                <div>{val.phone} </div>
                             )
                         }}
                     />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="Giới tính"
-                                width="200px"
-                            />
-                        }
-                        key={"sex"}
-                        dataIndex={"sex"}
-                        render={(value, record) => {
-                            return (
-                                <div>
-                                    {genderConfig(value)}
-                                </div>
-                            )
-                        }}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="CCCD"
-                                width="200px"
-                            />
-                        }
-                        key={"cccd"}
-                        dataIndex={"cccd"}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="Điện thoại"
-                                width="200px"
-                            />
-                        }
-                        key={"phone"}
-                        dataIndex={"phone"}
-                    />
-
                     <Column
                         title={
                             <TitleTableCommon
@@ -269,12 +254,12 @@ const ListMemberManagement = () => {
                 />
             </div>
             <DialogConfirmCommon
-                message={"Bạn có muốn xóa thành viên này ra khỏi hệ thống"}
+                message={"Bạn có muốn xóa chi nhánh này ra khỏi hệ thống"}
                 titleCancel={"Bỏ qua"}
-                titleOk={"Xóa thành viên"}
+                titleOk={"Xóa chi nhánh"}
                 visible={isDeleteModal}
                 handleCancel={onCloseModalDelete}
-                handleOk={onDeleteMember}
+                handleOk={onDeleteBranch}
                 title={"Xác nhận"}
             />
             <FullPageLoading isLoading={loading} />
@@ -282,4 +267,4 @@ const ListMemberManagement = () => {
     )
 }
 
-export default ListMemberManagement
+export default ListBranchManagement

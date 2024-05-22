@@ -109,9 +109,6 @@ const ListShiftManagement = () => {
                                     disabled={false}
                                 />
                             </Col>
-                            <Col xs={24} sm={8} lg={4}>
-                                <ButtonFilterCommon icon={""} classColor="blue" onClick={() => { }} >Tìm kiếm</ButtonFilterCommon>
-                            </Col>
                         </Row>
 
                     </Col>

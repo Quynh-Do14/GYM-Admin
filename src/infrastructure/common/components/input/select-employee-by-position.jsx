@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Select } from "antd";
-import Constants from "../../../../core/common/constant";
-import { MessageError } from "../controls/MessageError";
-import { validateFields } from "../../../helper/helper";
+import { useRecoilValue } from "recoil";
+import { PositionState } from "../../../../core/atoms/position/positionState";
+import { validateFields } from '../../../helper/helper';
+import { MessageError } from '../controls/MessageError';
+import employeeService from "../../../repositories/employee/service/employee.service";
 
-const InputSelectGenderCommon = (props) => {
+const InputSelectEmployeeByPositionCommon = (props) => {
     const {
         dataAttribute,
         setData,
@@ -16,8 +18,8 @@ const InputSelectGenderCommon = (props) => {
         isRequired,
         label
     } = props;
-
     const [value, setValue] = useState("");
+    const [listEmployee, setListEmployee] = useState([])
 
     const onChange = async (val) => {
         setValue(val || "");
@@ -25,6 +27,27 @@ const InputSelectGenderCommon = (props) => {
             [attribute]: val
         });
     };
+
+    const onGetEmployeeAsync = async () => {
+        const param = {
+
+        }
+        try {
+            await employeeService.getEmployee(
+                param,
+                () => { }
+            ).then((res) => {
+                setListEmployee(res.content)
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+
+    useEffect(() => {
+        onGetEmployeeAsync().then(_ => { });
+    }, [])
 
     let labelLower = label.toLowerCase();
     const validateBlur = (isImplicitChange = false) => {
@@ -68,19 +91,19 @@ const InputSelectGenderCommon = (props) => {
                             value={value}
                             listHeight={120}
                             onChange={onChange}
-                            onBlur={() => onBlur(false)}
+                            onBlur={onBlur}
                             placeholder={`Chọn ${label}`}
                             getPopupContainer={trigger => trigger.parentNode}
                         >
                             {
-                                Constants.Gender.List.map((item, index) => {
+                                listEmployee && listEmployee.length && listEmployee.map((item, index) => {
                                     return (
                                         <Select.Option
                                             key={index}
-                                            value={item.value}
-                                            title={item.label}
+                                            value={item.id}
+                                            title={item.name}
                                         >
-                                            {item.label}
+                                            {item.name}
                                         </Select.Option>
                                     )
                                 })
@@ -93,4 +116,4 @@ const InputSelectGenderCommon = (props) => {
         </div>
     );
 }
-export default InputSelectGenderCommon;
+export default InputSelectEmployeeByPositionCommon;

@@ -16,11 +16,12 @@ import { ButtonFilterCommon } from '../../infrastructure/common/components/butto
 import { ROUTE_PATH } from '../../core/common/appRouter'
 import { useNavigate } from 'react-router-dom';
 import DialogConfirmCommon from '../../infrastructure/common/components/modal/dialogConfirm'
-import memberService from '../../infrastructure/repositories/member/service/member.service'
+import branchService from '../../infrastructure/repositories/branch/service/branch.service'
+import roomService from '../../infrastructure/repositories/room/service/room.service'
 
 let timeout
-const ListMemberManagement = () => {
-    const [listMember, setListMember] = useState([])
+const ListRoomManagement = () => {
+    const [listRoom, setListRoom] = useState([])
     const [total, setTotal] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -34,7 +35,7 @@ const ListMemberManagement = () => {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    const onGetMemberAsync = async ({ name = "", size = pageSize, page = currentPage, startDate = "", endDate = "" }) => {
+    const onGetRoomAsync = async ({ name = "", size = pageSize, page = currentPage, startDate = "", endDate = "" }) => {
         const param = {
             page: page - 1,
             size: size,
@@ -43,11 +44,11 @@ const ListMemberManagement = () => {
             // endDate: endDate,
         }
         try {
-            await memberService.getMember(
+            await roomService.getRoom(
                 param,
                 setLoading
             ).then((res) => {
-                setListMember(res.content)
+                setListRoom(res)
                 setTotal(res.totalElements)
             })
         }
@@ -57,7 +58,7 @@ const ListMemberManagement = () => {
     }
 
     const onSearch = async (name = "", size = pageSize, page = 1, startDate = "", endDate = "") => {
-        await onGetMemberAsync({ name: name, size: size, page: page, startDate: startDate, endDate: endDate });
+        await onGetRoomAsync({ name: name, size: size, page: page, startDate: startDate, endDate: endDate });
     };
 
     const onChangeSearchText = (e) => {
@@ -89,10 +90,10 @@ const ListMemberManagement = () => {
     const onCloseModalDelete = () => {
         setIsDeleteModal(false);
     };
-    const onDeleteMember = async () => {
+    const onDeleteRoom = async () => {
         setIsDeleteModal(false);
         try {
-            await memberService.deleteMember(
+            await roomService.deleteRoom(
                 idSelected,
                 setLoading
             ).then((res) => {
@@ -106,10 +107,10 @@ const ListMemberManagement = () => {
         }
     }
     const onNavigate = (id) => {
-        navigate(`${(ROUTE_PATH.VIEW_MEMBER).replace(`${Constants.UseParams.Id}`, "")}${id}`);
+        navigate(`${(ROUTE_PATH.VIEW_ROOM).replace(`${Constants.UseParams.Id}`, "")}${id}`);
     }
     return (
-        <MainLayout breadcrumb={"Quản lý thành viên"} title={"Danh sách thành viên"} redirect={""}>
+        <MainLayout breadcrumb={"Quản lý phòng"} title={"Danh sách phòng"} redirect={""}>
             <div className='flex flex-col header-page'>
                 <Row className='filter-page mb-2 py-2-5' gutter={[10, 10]} justify={"space-between"} align={"middle"}>
                     <Col xs={24} sm={24} lg={16}>
@@ -126,13 +127,13 @@ const ListMemberManagement = () => {
 
                     </Col>
                     <Col>
-                        <ButtonCommon icon={<PlusOutlined />} classColor="orange" onClick={() => navigate(ROUTE_PATH.ADD_MEMBER)} >Thêm mới</ButtonCommon>
+                        <ButtonCommon icon={<PlusOutlined />} classColor="orange" onClick={() => navigate(ROUTE_PATH.ADD_ROOM)} >Thêm mới</ButtonCommon>
                     </Col>
                 </Row>
             </div>
             <div className='flex-1 overflow-auto bg-[#FFFFFF] content-page'>
                 <Table
-                    dataSource={listMember}
+                    dataSource={listRoom}
                     pagination={false}
                     className='table-common'
                 >
@@ -150,8 +151,7 @@ const ListMemberManagement = () => {
                     <Column
                         title={
                             <TitleTableCommon
-                                title="Tên thành viên"
-                                width="200px"
+                                title="phòng"
                             />
                         }
                         key={"name"}
@@ -160,82 +160,11 @@ const ListMemberManagement = () => {
                     <Column
                         title={
                             <TitleTableCommon
-                                title="Email"
-                                width="200px"
-                            />
-                        }
-                        key={"user"}
-                        dataIndex={"user"}
-                        render={(value, record) => {
-                            return (
-                                <div>
-                                    {value?.email}
-                                </div>
-                            )
-                        }}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="Tên đăng nhập"
-                                width="200px"
-                            />
-                        }
-                        key={"user"}
-                        dataIndex={"user"}
-                        render={(value, record) => {
-                            return (
-                                <div>
-                                    {value?.username}
-                                </div>
-                            )
-                        }}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="Giới tính"
-                                width="200px"
-                            />
-                        }
-                        key={"sex"}
-                        dataIndex={"sex"}
-                        render={(value, record) => {
-                            return (
-                                <div>
-                                    {genderConfig(value)}
-                                </div>
-                            )
-                        }}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="CCCD"
-                                width="200px"
-                            />
-                        }
-                        key={"cccd"}
-                        dataIndex={"cccd"}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="Điện thoại"
-                                width="200px"
-                            />
-                        }
-                        key={"phone"}
-                        dataIndex={"phone"}
-                    />
-
-                    <Column
-                        title={
-                            <TitleTableCommon
                                 title="Thao tác"
                                 width={"60px"}
                             />
                         }
+                        width={"60px"}
                         fixed="right"
                         align='center'
                         render={(action, record) => (
@@ -269,12 +198,12 @@ const ListMemberManagement = () => {
                 />
             </div>
             <DialogConfirmCommon
-                message={"Bạn có muốn xóa thành viên này ra khỏi hệ thống"}
+                message={"Bạn có muốn xóa phòng này ra khỏi hệ thống"}
                 titleCancel={"Bỏ qua"}
-                titleOk={"Xóa thành viên"}
+                titleOk={"Xóa phòng"}
                 visible={isDeleteModal}
                 handleCancel={onCloseModalDelete}
-                handleOk={onDeleteMember}
+                handleOk={onDeleteRoom}
                 title={"Xác nhận"}
             />
             <FullPageLoading isLoading={loading} />
@@ -282,4 +211,4 @@ const ListMemberManagement = () => {
     )
 }
 
-export default ListMemberManagement
+export default ListRoomManagement

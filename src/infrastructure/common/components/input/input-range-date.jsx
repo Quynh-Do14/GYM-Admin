@@ -71,7 +71,7 @@ const InputRangeDateCommon = (props) => {
                 <RangePicker
                     allowClear={false}
                     size="middle"
-                    className='w-full input-date-common'
+                    className={`${validate[attribute]?.isError ? "input-error" : ""} w-full input-date-common`}
                     value={value}
                     placeholder={`Chọn ${label}`}
                     // onChange={(values) => setValue(values)}

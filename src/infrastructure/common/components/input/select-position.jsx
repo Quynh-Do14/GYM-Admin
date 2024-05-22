@@ -18,10 +18,10 @@ const InputSelectPositionCommon = (props) => {
         label
     } = props;
     const dataPosition = useRecoilValue(PositionState);
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState(0);
 
     const onChange = async (val) => {
-        setValue(val || "");
+        setValue(val || null);
         setData({
             [attribute]: val
         });
@@ -64,7 +64,7 @@ const InputSelectPositionCommon = (props) => {
                             showSearch
                             allowClear={false}
                             showArrow
-                            className="w-full text-left"
+                            className={`${validate[attribute]?.isError ? "input-error" : ""} w-full text-left`}
                             disabled={disabled}
                             value={value}
                             listHeight={120}

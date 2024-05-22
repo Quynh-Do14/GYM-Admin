@@ -47,7 +47,8 @@ const ListPositonManagement = () => {
                 param,
                 setLoading
             ).then((res) => {
-                setDataPosition(res)
+                setDataPosition(res.content)
+                setTotal(res.totalElements)
             })
         }
         catch (error) {
@@ -119,9 +120,6 @@ const ListPositonManagement = () => {
                                     onChange={onChangeSearchText}
                                     disabled={false}
                                 />
-                            </Col>
-                            <Col xs={24} sm={8} lg={4}>
-                                <ButtonFilterCommon icon={""} classColor="blue" onClick={() => { }} >Tìm kiếm</ButtonFilterCommon>
                             </Col>
                         </Row>
 

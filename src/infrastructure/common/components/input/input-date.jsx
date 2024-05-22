@@ -83,15 +83,14 @@ const InputDateCommon = (props) => {
                 <DatePicker
                     allowClear={false}
                     size="middle"
-                    className='w-full input-date-common'
+                    className={`${validate[attribute]?.isError ? "input-error" : ""} w-full input-date-common`}
                     value={value}
                     placeholder={`Chọn ${label}`}
-                    // onChange={(values) => setValue(values)}
                     onChange={onChange}
                     disabledDate={disabledDate}
                     disabled={disabled}
                     format={`${showHour ? "DD/MM/YYYY hh:mm:ss" : "DD/MM/YYYY"}`}
-                    onBlur={() => onBlur(false)}
+                    // onBlur={() => onBlur(false)}
                     showTime={showTime}
                 />
 

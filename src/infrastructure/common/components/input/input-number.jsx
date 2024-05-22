@@ -58,12 +58,12 @@ const InputNumberCommon = (props) => {
                     <InputNumber
                         min={0}
                         max={null}
-                        className='w-full'
                         disabled={disabled}
                         value={value ? value : ""}
                         onChange={onChange}
                         onBlur={() => onBlur(false)}
                         placeholder={`Nhập ${label}`}
+                        className={`${validate[attribute]?.isError ? "input-error" : ""} w-full`}
                     />
                     <MessageError isError={validate[attribute]?.isError || false} message={validate[attribute]?.message || ""} />
                 </div>

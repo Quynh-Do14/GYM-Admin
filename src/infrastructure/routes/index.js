@@ -31,6 +31,12 @@ import ViewBookingManagement from "../../pages/BookingManagement/view";
 import ListPackageManagement from "../../pages/PackageManagement/list";
 import AddPackageManagement from "../../pages/PackageManagement/add";
 import ViewPackageManagement from "../../pages/PackageManagement/view";
+import ListBranchManagement from "../../pages/BranchManagement/list";
+import ViewBranchManagement from "../../pages/BranchManagement/view";
+import AddBranchManagement from "../../pages/BranchManagement/add";
+import ListRoomManagement from "../../pages/RoomManagement/list";
+import AddRoomManagement from "../../pages/RoomManagement/add";
+import ViewRoomManagement from "../../pages/RoomManagement/view";
 
 export const privateRoutes = [
     {
@@ -179,6 +185,36 @@ export const privateRoutes = [
     {
         path: ROUTE_PATH.VIEW_BOOKING,
         component: ViewBookingManagement,
+        private: true,
+    },
+    {
+        path: ROUTE_PATH.BRANCH,
+        component: ListBranchManagement,
+        private: true,
+    },
+    {
+        path: ROUTE_PATH.ADD_BRANCH,
+        component: AddBranchManagement,
+        private: true,
+    },
+    {
+        path: ROUTE_PATH.VIEW_BRANCH,
+        component: ViewBranchManagement,
+        private: true,
+    },
+    {
+        path: ROUTE_PATH.ROOM,
+        component: ListRoomManagement,
+        private: true,
+    },
+    {
+        path: ROUTE_PATH.ADD_ROOM,
+        component: AddRoomManagement,
+        private: true,
+    },
+    {
+        path: ROUTE_PATH.VIEW_ROOM,
+        component: ViewRoomManagement,
         private: true,
     },
 ]
