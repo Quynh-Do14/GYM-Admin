@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Select } from "antd";
 import Constants from "../../../../core/common/constant";
 import { MessageError } from "../controls/MessageError";
-import { validateFields } from "../../../helper/helper";
-const InputSelectCommon = (props) => {
+import { convertTimeParams, validateFields } from "../../../helper/helper";
+import bookingService from "../../../repositories/booking/service/booking.service";
+import userService from "../../../repositories/user-management/service/user.service";
+import equipmentService from "../../../repositories/equipment/service/equipment.service";
+const InputMultiEquipmentCommon = (props) => {
     const {
         dataAttribute,
         setData,
@@ -17,14 +20,34 @@ const InputSelectCommon = (props) => {
         label
     } = props;
 
-    const [value, setValue] = useState("");
-
+    const [value, setValue] = useState(null);
+    const [listEquipment, setListEquipment] = useState([]);
     const onChange = async (val) => {
         setValue(val || "");
         setData({
             [attribute]: val
         });
     };
+    const getEquipmentAsync = async () => {
+        const params = {
+        }
+        try {
+            await equipmentService.getEquipment(
+                params,
+                () => { }
+            ).then((response) => {
+                if (response) {
+                    setListEquipment(response.content)
+                }
+            })
+        } catch (error) {
+            console.error(error);
+
+        }
+    }
+    useEffect(() => {
+        getEquipmentAsync().then(() => { })
+    }, [])
 
     let labelLower = label.toLowerCase();
     const validateBlur = (isImplicitChange = false) => {
@@ -59,6 +82,7 @@ const InputSelectCommon = (props) => {
                 </div>
                 <div>
                     <Select
+                        mode="multiple"
                         showSearch
                         allowClear={false}
                         showArrow
@@ -67,19 +91,19 @@ const InputSelectCommon = (props) => {
                         value={value}
                         listHeight={120}
                         onChange={onChange}
-                        onBlur={onBlur}
+                        onBlur={() => onBlur(false)}
                         placeholder={`Chọn ${label}`}
                         getPopupContainer={trigger => trigger.parentNode}
                     >
                         {
-                            listDataOfItem && listDataOfItem.length && listDataOfItem.map((item, index) => {
+                            listEquipment && listEquipment.length && listEquipment.map((item, index) => {
                                 return (
                                     <Select.Option
                                         key={index}
-                                        value={item.value}
-                                        title={item.label}
+                                        value={item.id}
+                                        title={item.name}
                                     >
-                                        {item.label}
+                                        {item.name}
                                     </Select.Option>
                                 )
                             })
@@ -91,4 +115,4 @@ const InputSelectCommon = (props) => {
         </div>
     );
 }
-export default InputSelectCommon;
+export default InputMultiEquipmentCommon;

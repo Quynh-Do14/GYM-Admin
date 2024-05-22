@@ -122,15 +122,15 @@ const ListBookingManagement = () => {
                                     disabled={false}
                                 />
                             </Col>
-                            <Col xs={24} sm={8} lg={4}>
+                            {/* <Col xs={24} sm={8} lg={4}>
                                 <ButtonFilterCommon icon={""} classColor="blue" onClick={() => { }} >Tìm kiếm</ButtonFilterCommon>
-                            </Col>
+                            </Col> */}
                         </Row>
 
                     </Col>
-                    <Col>
+                    {/* <Col>
                         <ButtonCommon icon={<PlusOutlined />} classColor="orange" onClick={() => navigate(ROUTE_PATH.ADD_BOOKING)} >Thêm mới</ButtonCommon>
-                    </Col>
+                    </Col> */}
                 </Row>
             </div>
             <div className='flex-1 overflow-auto bg-[#FFFFFF] content-page'>

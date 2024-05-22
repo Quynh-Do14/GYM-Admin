@@ -74,6 +74,7 @@ const InputTextAreaCommon = (props) => {
                             disabled={disabled}
                             placeholder={`Nhập ${label}`}
                             style={{ borderRadius: "8px !important" }}
+                            className={`${validate[attribute]?.isError ? "input-error" : ""}`}
                         />
                         <MessageError isError={validate[attribute]?.isError || false} message={validate[attribute]?.message || ""} />
                     </div>

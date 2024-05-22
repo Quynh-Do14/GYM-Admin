@@ -59,7 +59,7 @@ const InputPasswordCommon = (props) => {
     return (
         <div>
             <div className='input-common'>
-                <div className='title'>
+                <div className='title mb-2'>
                     <span>
                         <span className='label'>{label}</span>
                         <span className='ml-1 is-required'>{isRequired ? "*" : ""} </span>
@@ -73,6 +73,7 @@ const InputPasswordCommon = (props) => {
                         onBlur={() => onBlur(false)}
                         disabled={disabled}
                         placeholder={`Nhập ${labelLower}`}
+                        className={`${validate[attribute]?.isError ? "input-error" : ""}`}
                     />
                     <MessageError isError={validate[attribute]?.isError || false} message={validate[attribute]?.message || ""} />
                 </div>

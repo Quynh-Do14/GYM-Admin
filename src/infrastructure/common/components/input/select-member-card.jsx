@@ -64,7 +64,7 @@ const InputSelectMemberCardCommon = (props) => {
                             showSearch
                             allowClear={false}
                             showArrow
-                            className="w-full text-left"
+                            className={`${validate[attribute]?.isError ? "input-error" : ""} w-full text-left`}
                             disabled={disabled}
                             value={value}
                             listHeight={120}

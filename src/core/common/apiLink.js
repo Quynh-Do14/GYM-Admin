@@ -13,6 +13,19 @@ export class Endpoint {
         static Update = "/employees/update"
         static Delete = "/employees/delete"
     }
+    static Branch = class {
+        static Get = "/gym-branches"
+        static GetById = "/gym-branches/admin"
+        static Add = "/gym-branches/add"
+        static Update = "/gym-branches/update"
+        static Delete = "/gym-branches/delete"
+    }
+    static Room = class {
+        static Get = "/rooms"
+        static Add = "/rooms/add"
+        static Update = "/rooms/update"
+        static Delete = "/rooms/delete"
+    }
     static Position = class {
         static Get = "/positions"
         static Add = "/positions/add"
@@ -34,6 +47,7 @@ export class Endpoint {
     static Member = class {
         static Get = "/members"
         static Add = "/members/admin/add"
+        static AddUser = "/members/admin/add"
         static Update = "/members/update"
         static Delete = "/members/delete"
     }

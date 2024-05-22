@@ -4,6 +4,10 @@ export const ROUTE_PATH = {
     LOGIN: `${PREFIX}/login`,
     REGISTER: `${PREFIX}/register`,
 
+    BRANCH: `${PREFIX}/gym-branches`,
+    VIEW_BRANCH: `${PREFIX}/gym-branches/view/:id`,
+    ADD_BRANCH: `${PREFIX}/gym-branches/add`,
+
     USER: `${PREFIX}/user`,
     VIEW_USER: `${PREFIX}/user/view/:id`,
     ADD_USER: `${PREFIX}/user/add`,
@@ -39,6 +43,10 @@ export const ROUTE_PATH = {
     BOOKING: `${PREFIX}/bookings`,
     VIEW_BOOKING: `${PREFIX}/bookings/view/:id`,
     ADD_BOOKING: `${PREFIX}/bookings/add`,
+
+    ROOM: `${PREFIX}/room`,
+    VIEW_ROOM: `${PREFIX}/room/view/:id`,
+    ADD_ROOM: `${PREFIX}/room/add`,
 
     MAINLAYOUT: `${PREFIX}/`,
 };

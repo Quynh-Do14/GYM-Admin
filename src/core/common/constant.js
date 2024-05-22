@@ -1,9 +1,19 @@
-import { ContainerOutlined, DatabaseOutlined, EnvironmentOutlined, MessageOutlined, ProjectOutlined, ScheduleOutlined, TagsOutlined, UserOutlined } from "@ant-design/icons";
+import { ContainerOutlined, DatabaseOutlined, EnvironmentOutlined, MessageOutlined, OneToOneOutlined, ProjectOutlined, ScheduleOutlined, TagsOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 import { ROUTE_PATH } from "./appRouter";
 
 export default class Constants {
     static Menu = class {
         static List = [
+            {
+                label: "Quản lý chi nhánh",
+                link: ROUTE_PATH.BRANCH,
+                icon: <EnvironmentOutlined />
+            },
+            {
+                label: "Quản lý phòng",
+                link: ROUTE_PATH.ROOM,
+                icon: <TagsOutlined />
+            },
             {
                 label: "Quản lý nhân viên",
                 link: ROUTE_PATH.EMPLOYEE,
@@ -12,84 +22,33 @@ export default class Constants {
             {
                 label: "Quản lý chức vụ",
                 link: ROUTE_PATH.POSITION,
-                icon: <UserOutlined />
+                icon: <ProjectOutlined />
             },
-            // {
-            //     label: "Ca làm việc",
-            //     link: ROUTE_PATH.SHIFT,
-            //     icon: <DatabaseOutlined />
-            // },
-            // {
-            //     label: "Nhân viên - Ca làm việc",
-            //     link: ROUTE_PATH.CATEGORY_VEHICLE,
-            //     icon: <DatabaseOutlined />
-            // },
-            // {
-            //     label: "Quản lý thẻ thành viên",
-            //     link: ROUTE_PATH.MEMBER_CARD,
-            //     icon: <ScheduleOutlined />
-            // },
             {
                 label: "Quản lý gói thành viên",
                 link: ROUTE_PATH.PACKAGE,
-                icon: <ScheduleOutlined />
+                icon: <ContainerOutlined />
             },
             {
                 label: "Quản lý thành viên",
                 link: ROUTE_PATH.MEMBER,
-                icon: <ScheduleOutlined />
+                icon: <TeamOutlined />
             },
             {
                 label: "Quản lý loại thiết bị",
                 link: ROUTE_PATH.EQUIP_TYPE,
-                icon: <EnvironmentOutlined />
+                icon: <TagsOutlined />
             },
             {
                 label: "Quản lý thiết bị",
                 link: ROUTE_PATH.EQUIPMENT,
-                icon: <EnvironmentOutlined />
+                icon: < DatabaseOutlined />
             },
             {
                 label: "Quản lý đặt lịch",
                 link: ROUTE_PATH.BOOKING,
                 icon: <ScheduleOutlined />
             },
-
-            // {
-            //     label: "Quản lý nhà hàng",
-            //     link: ROUTE_PATH.RESTAURANT,
-            //     icon: <ScheduleOutlined />
-            // },
-            // {
-            //     label: "Quản lý khách sạn",
-            //     link: ROUTE_PATH.HOTEL,
-            //     icon: <ScheduleOutlined />
-            // },
-            // {
-            //     label: "Quản lý lễ hội",
-            //     link: ROUTE_PATH.FESTIVAL,
-            //     icon: <ScheduleOutlined />
-            // },
-            // {
-            //     label: "Quản lý đặc sản",
-            //     link: ROUTE_PATH.SPECIALTY,
-            //     icon: <TagsOutlined />
-            // },
-            // {
-            //     label: "Quản lý tin tức",
-            //     link: ROUTE_PATH.NEWS,
-            //     icon: <ContainerOutlined />
-            // },
-            // {
-            //     label: "Quản lý đánh giá",
-            //     link: ROUTE_PATH.EVALUATE,
-            //     icon: <ContainerOutlined />
-            // },
-            // {
-            //     label: "Quản lý quận huyện",
-            //     link: ROUTE_PATH.DISTRICT,
-            //     icon: <ProjectOutlined />
-            // },
         ]
     };
     static TOKEN = "token";

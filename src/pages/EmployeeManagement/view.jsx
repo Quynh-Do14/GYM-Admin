@@ -124,7 +124,7 @@ const ViewEmployeeManagement = () => {
     };
     console.log("dataEmployee", dataEmployee.position);
     return (
-        <MainLayout breadcrumb={"Quản lý ca làm việc"} title={"Xem thông tin ca làm việc"} redirect={ROUTE_PATH.EMPLOYEE}>
+        <MainLayout breadcrumb={"Quản lý nhân viên"} title={"Xem thông tin nhân viên"} redirect={ROUTE_PATH.EMPLOYEE}>
             <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
                 <div className='bg-white scroll-auto'>
                     <Row>
