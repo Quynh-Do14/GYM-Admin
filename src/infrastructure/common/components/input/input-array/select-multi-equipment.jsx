@@ -3,8 +3,9 @@ import { MessageError } from '../../controls/MessageError';
 import { validateFields } from '../../../../helper/helper';
 import { Select } from 'antd';
 import roomService from '../../../../repositories/room/service/room.service';
+import equipmentService from '../../../../repositories/equipment/service/equipment.service';
 
-const InputSectArrayCommon = (props) => {
+const InputSelectEquipmentArrayCommon = (props) => {
     const {
         label,
         attribute,
@@ -22,11 +23,11 @@ const InputSectArrayCommon = (props) => {
     const [value, setValue] = useState(null);
     const [listRoom, setListRoom] = useState([]);
 
-    const onGetRoomAsync = async () => {
+    const onGetEquipmentAsync = async () => {
         const param = {
         }
         try {
-            await roomService.getRoom(
+            await equipmentService.getEquipment(
                 param,
                 () => { }
             ).then((res) => {
@@ -39,8 +40,9 @@ const InputSectArrayCommon = (props) => {
     }
 
     useEffect(() => {
-        onGetRoomAsync().then(() => { })
-    }, [])
+        onGetEquipmentAsync().then(() => { })
+    }, []);
+
     if (setValidateAllItems) {
         setValidateAllItems([index], () => {
             if (disabled) {
@@ -77,27 +79,22 @@ const InputSectArrayCommon = (props) => {
         if (isRequired) {
             validateFields(isImplicitChange, `${attribute}${index}`, !value, setValidate, validate, !value ? `Vui lòng nhập ${labelLower}` : "");
         }
-        // data?.map((it) => {
-        //     if (it.roomId == value) {
-        //         let condition = it.roomId == value
-        //         console.log(true);
-        //         validateFields(isImplicitChange, `${attribute}${index}`, !condition, setValidate, validate, !condition ? `Phòng này đã được chọn rồi. Vui lòng chọn phòng khác` : "");
-        //     }
-        // })
     };
-    console.log("validate", validate);
+
     useEffect(() => {
         if (data[index]) {
             setValue(data[index][attribute]);
         }
     }, [index, data, attribute]);
-    console.log("data",data);
+
     useEffect(() => {
 
         if (submittedTime != null) {
             onBlur(true);
         }
     }, [submittedTime]);
+
+
     return (
         <div>
             <div className='mb-4 input-common'>
@@ -109,10 +106,10 @@ const InputSectArrayCommon = (props) => {
                 </div>
                 <div>
                     <Select
-                        showSearch={true}
+                        showSearch
                         allowClear={false}
                         showArrow
-                        className={`${validate[`${attribute}${index}`]?.isError ? "input-error" : ""} w-full text-left`}
+                        className={`${validate[attribute]?.isError ? "input-error" : ""} w-full text-left`}
                         disabled={disabled}
                         value={value}
                         listHeight={120}
@@ -142,4 +139,4 @@ const InputSectArrayCommon = (props) => {
 
     )
 }
-export default InputSectArrayCommon;
+export default InputSelectEquipmentArrayCommon;

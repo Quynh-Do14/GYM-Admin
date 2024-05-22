@@ -28,7 +28,7 @@ class RoomService {
         setLoading(true)
         try {
             return await RequestService
-                .get(`${Endpoint.Room.Get}/${id}`)
+                .get(`${Endpoint.Room.GetById}/${id}`)
                 .then(response => {
                     if (response) {
                         return response

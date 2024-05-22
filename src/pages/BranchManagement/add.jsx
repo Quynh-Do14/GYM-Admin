@@ -209,7 +209,8 @@ const AddBranchManagement = () => {
                                                                     disabled={false}
                                                                     validate={validate}
                                                                     setValidate={setValidate}
-                                                                    submittedTime={submittedTime} index={index}
+                                                                    submittedTime={submittedTime} 
+                                                                    index={index}
                                                                 />
                                                             </Col>
                                                         </Row>

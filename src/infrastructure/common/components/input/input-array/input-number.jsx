@@ -92,7 +92,7 @@ const InputNumberArrayCommon = (props) => {
                         onBlur={() => onBlur(false)}
                         placeholder={`Nhập ${label}`}
                     />
-                    <MessageError isError={validate[`${attribute}${index}`]?.isError || false} message={validate[attribute]?.message || ""} />
+                    <MessageError isError={validate[`${attribute}${index}`]?.isError || false} message={validate[`${attribute}${index}`]?.message || ""} />
                 </div>
             </div>
         </div>

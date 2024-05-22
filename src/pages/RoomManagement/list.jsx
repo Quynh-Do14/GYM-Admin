@@ -48,7 +48,7 @@ const ListRoomManagement = () => {
                 param,
                 setLoading
             ).then((res) => {
-                setListRoom(res)
+                setListRoom(res.content)
                 setTotal(res.totalElements)
             })
         }

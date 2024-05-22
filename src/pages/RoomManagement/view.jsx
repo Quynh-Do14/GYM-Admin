@@ -18,12 +18,24 @@ import InputSelectCommon from '../../infrastructure/common/components/input/sele
 import branchService from '../../infrastructure/repositories/branch/service/branch.service';
 import InputMultiEquipmentCommon from '../../infrastructure/common/components/input/select-multi-equipment';
 import roomService from '../../infrastructure/repositories/room/service/room.service';
+import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import InputSelectEquipmentArrayCommon from '../../infrastructure/common/components/input/input-array/select-multi-equipment';
+import InputNumberArrayCommon from '../../infrastructure/common/components/input/input-array/input-number';
 
 const ViewRoomManagement = () => {
     const [validate, setValidate] = useState({});
     const [loading, setLoading] = useState(false);
     const [submittedTime, setSubmittedTime] = useState();
     const [detailRoom, setDetailRoom] = useState({});
+
+    const [listEquipment, setListEquipment] = useState([
+        {
+            index: 0,
+            equipmentId: null,
+            amount: null
+        }
+
+    ])
 
     const [_data, _setData] = useState({});
     const dataRoom = _data;
@@ -37,7 +49,7 @@ const ViewRoomManagement = () => {
     const navigate = useNavigate();
 
     const onBack = () => {
-        navigate(ROUTE_PATH.BRANCH)
+        navigate(ROUTE_PATH.ROOM)
     };
 
 
@@ -77,6 +89,14 @@ const ViewRoomManagement = () => {
             setDataRoom({
                 name: detailRoom.name,
             });
+            const newArr = detailRoom.equipmentAmounts?.map((it) => {
+                return {
+                    equipmentId: it.equipment?.id,
+                    amount: it.amount,
+                }
+
+            })
+            setListEquipment(newArr)
         };
     }, [detailRoom]);
 
@@ -87,6 +107,7 @@ const ViewRoomManagement = () => {
                 param.id,
                 {
                     name: dataRoom.name,
+                    equipmentAmounts: convertListEquipment()
                 },
                 onBack,
                 setLoading
@@ -96,12 +117,41 @@ const ViewRoomManagement = () => {
             WarningMessage("Nhập thiếu thông tin", "Vui lòng nhập đầy đủ thông tin")
         };
     };
+
+    const onAddEquipment = () => {
+        setListEquipment([
+            ...listEquipment,
+            {
+                index: Number(listEquipment.length - 1) + 1,
+                equipmentId: "",
+                amount: 0
+            },
+        ])
+    }
+
+    const onDeleteOption = (index) => {
+        const spliceOption = [...listEquipment];
+        spliceOption.splice(index, 1)
+        setListEquipment(spliceOption)
+    }
+    const convertListEquipment = () => {
+        const arr = listEquipment.map((it) => {
+            return {
+                equipment: {
+                    id: it.equipmentId
+                },
+                amount: it.amount
+            }
+        })
+        return arr
+    }
+
     return (
-        <MainLayout breadcrumb={"Quản lý chi nhánh"} title={"Xem thông tin chi nhánh"} redirect={ROUTE_PATH.BRANCH}>
+        <MainLayout breadcrumb={"Quản lý chi nhánh"} title={"Xem thông tin chi nhánh"} redirect={ROUTE_PATH.ROOM}>
             <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
                 <div className='bg-white scroll-auto'>
                     <Row>
-                        <Col xs={24} sm={24} md={12} lg={16} xl={18} xxl={19} className='border-add'>
+                        <Col span={24} className='border-add'>
                             <div className='legend-title'>Cập nhật thông tin</div>
                             <Row gutter={[30, 0]}>
                                 <Col span={24}>
@@ -118,17 +168,73 @@ const ViewRoomManagement = () => {
                                     />
                                 </Col>
                                 <Col span={24}>
-                                    <InputMultiEquipmentCommon
-                                        label={"Thiết bị"}
-                                        attribute={"equipmentAmounts"}
-                                        isRequired={true}
-                                        dataAttribute={dataRoom.equipmentAmounts}
-                                        setData={setDataRoom}
-                                        disabled={false}
-                                        validate={validate}
-                                        setValidate={setValidate}
-                                        submittedTime={submittedTime}
-                                    />
+                                    <div
+                                        className='flex gap-2 items-center cursor-pointer bg-[#e1e1e1] p-2 rounded-[4px]'
+                                        onClick={onAddEquipment}
+                                    >
+                                        <div className='text-[#094174] font-semibold text-[15px] '>Thêm thiết bị </div>
+                                        <PlusCircleOutlined className='text-[20px]' />
+                                    </div>
+                                    {
+                                        listEquipment && listEquipment.length ?
+                                            listEquipment.map((it, index) => {
+                                                return (
+                                                    <div key={index}>
+                                                        <div className='flex gap-2 items-center justify-between'>
+                                                            <div
+                                                                className='text-[#094174] 
+                                                                font-semibold text-[15px] py-2'
+                                                            >
+                                                                Thiết bị {index + 1}
+                                                            </div>
+                                                            <button
+                                                                disabled={Number(index) == 0 ? true : false}
+                                                                onClick={() => onDeleteOption(index)}
+
+                                                            >
+                                                                <DeleteOutlined
+                                                                    className={`${Number(index) == 0 ? "cursor-not-allowed" : "cursor-pointer"} text-[24px]`}
+                                                                />
+                                                            </button>
+                                                        </div>
+                                                        <Row gutter={[30, 0]}>
+                                                            <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                                                <InputSelectEquipmentArrayCommon
+                                                                    dataAttribute={it.equipmentId}
+                                                                    label={"Thiết bị"}
+                                                                    attribute={"equipmentId"}
+                                                                    isRequired={true}
+                                                                    data={listEquipment}
+                                                                    setData={setListEquipment}
+                                                                    disabled={false}
+                                                                    validate={validate}
+                                                                    setValidate={setValidate}
+                                                                    submittedTime={submittedTime}
+                                                                    index={index}
+                                                                />
+                                                            </Col>
+                                                            <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                                                <InputNumberArrayCommon
+                                                                    dataAttribute={it.amount}
+                                                                    label={"Số lượng"}
+                                                                    attribute={"amount"}
+                                                                    isRequired={true}
+                                                                    data={listEquipment}
+                                                                    setData={setListEquipment}
+                                                                    disabled={false}
+                                                                    validate={validate}
+                                                                    setValidate={setValidate}
+                                                                    submittedTime={submittedTime} index={index}
+                                                                />
+                                                            </Col>
+                                                        </Row>
+                                                    </div>
+
+                                                )
+                                            })
+                                            :
+                                            null
+                                    }
                                 </Col>
                             </Row>
                         </Col>

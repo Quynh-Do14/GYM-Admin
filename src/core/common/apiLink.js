@@ -22,8 +22,9 @@ export class Endpoint {
     }
     static Room = class {
         static Get = "/rooms"
-        static Add = "/rooms/add"
-        static Update = "/rooms/update"
+        static GetById = "/rooms/admin"
+        static Add = "/rooms/admin/add"
+        static Update = "/rooms/admin/update"
         static Delete = "/rooms/delete"
     }
     static Position = class {
@@ -34,8 +35,8 @@ export class Endpoint {
     }
     static Equipment = class {
         static Get = "/equipments"
-        static Add = "/equipments/add"
-        static Update = "equipments/update"
+        static Add = "/equipments/admin/add"
+        static Update = "equipments/admin/update"
         static Delete = "/equipments/delete"
     }
     static EquipType = class {

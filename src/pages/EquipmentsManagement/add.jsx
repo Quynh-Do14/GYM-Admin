@@ -10,6 +10,7 @@ import equipmentService from '../../infrastructure/repositories/equipment/servic
 import { WarningMessage } from '../../infrastructure/common/components/toast/notificationToast';
 import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
 import InputNumberCommon from '../../infrastructure/common/components/input/input-number';
+import InputEquipTypeCommon from '../../infrastructure/common/components/input/select-equip-type';
 
 const AddEquipmentManagement = () => {
     const [validate, setValidate] = useState({});
@@ -50,6 +51,9 @@ const AddEquipmentManagement = () => {
         if (isValidData()) {
             await equipmentService.addEquipment({
                 name: dataEquipment.name,
+                equipType: {
+                    id: dataEquipment.equipType,
+                },
                 quantity: dataEquipment.quantity,
                 price: dataEquipment.price,
                 madein: dataEquipment.madein,
@@ -86,6 +90,19 @@ const AddEquipmentManagement = () => {
                                         attribute={"name"}
                                         isRequired={true}
                                         dataAttribute={dataEquipment.name}
+                                        setData={setDataEquipment}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                    />
+                                </Col>
+                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                    <InputEquipTypeCommon
+                                        label={"Loại thiết bị"}
+                                        attribute={"equipType"}
+                                        isRequired={true}
+                                        dataAttribute={dataEquipment.equipType}
                                         setData={setDataEquipment}
                                         disabled={false}
                                         validate={validate}
