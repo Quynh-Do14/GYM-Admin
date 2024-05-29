@@ -37,8 +37,14 @@ import AddBranchManagement from "../../pages/BranchManagement/add";
 import ListRoomManagement from "../../pages/RoomManagement/list";
 import AddRoomManagement from "../../pages/RoomManagement/add";
 import ViewRoomManagement from "../../pages/RoomManagement/view";
+import Dashboard from "../../pages/Dashboard";
 
 export const privateRoutes = [
+    {
+        path: ROUTE_PATH.DASHBOARD,
+        component: Dashboard,
+        private: false,
+    },
     {
         path: ROUTE_PATH.LOGIN,
         component: LoginPage,

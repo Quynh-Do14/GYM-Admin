@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import MainLayout from '../../infrastructure/common/layouts/MainLayout'
-import { Col, Row, Table } from 'antd'
+import { Col, Row, Select, Table } from 'antd'
 import { TitleTableCommon } from '../../infrastructure/common/components/text/title-table-common'
 import { ActionCommon } from '../../infrastructure/common/components/action/action-common'
 
@@ -17,6 +17,8 @@ import { ROUTE_PATH } from '../../core/common/appRouter'
 import { useNavigate } from 'react-router-dom';
 import DialogConfirmCommon from '../../infrastructure/common/components/modal/dialogConfirm'
 import employeeService from '../../infrastructure/repositories/employee/service/employee.service'
+import { useRecoilValue } from 'recoil'
+import { PositionState } from '../../core/atoms/position/positionState'
 
 let timeout
 const ListEmployeeManagement = () => {
@@ -25,22 +27,20 @@ const ListEmployeeManagement = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [searchText, setSearchText] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [searchPosition, setSearchPosition] = useState("");
     const [idSelected, setIdSelected] = useState(null);
     const [isDeleteModal, setIsDeleteModal] = useState(false);
-
-
     const [loading, setLoading] = useState(false);
+
+    const positionState = useRecoilValue(PositionState)
     const navigate = useNavigate();
 
-    const onGetEmployeeAsync = async ({ name = "", size = pageSize, page = currentPage, startDate = "", endDate = "" }) => {
+    const onGetEmployeeAsync = async ({ name = "", position = "", size = pageSize, page = currentPage }) => {
         const param = {
             page: page - 1,
             size: size,
             name: name,
-            // startDate: startDate,
-            // endDate: endDate,
+            positionName: position
         }
         try {
             await employeeService.getEmployee(
@@ -56,29 +56,34 @@ const ListEmployeeManagement = () => {
         }
     }
 
-    const onSearch = async (name = "", size = pageSize, page = 1, startDate = "", endDate = "") => {
-        await onGetEmployeeAsync({ name: name, size: size, page: page, startDate: startDate, endDate: endDate });
+    const onSearch = async (name = "", position = "", size = pageSize, page = 1) => {
+        await onGetEmployeeAsync({ name: name, position: position, size: size, page: page });
     };
 
     const onChangeSearchText = (e) => {
         setSearchText(e.target.value);
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-            onSearch(e.target.value, pageSize, currentPage, startDate, endDate).then((_) => { });
+            onSearch(e.target.value, searchPosition, pageSize, currentPage,).then((_) => { });
         }, Constants.DEBOUNCE_SEARCH);
     };
+
+    const onChangePosition = async (value) => {
+        setSearchPosition(value)
+        await onSearch(searchText, value, pageSize, currentPage,).then(_ => { });
+    }
 
     useEffect(() => {
         onSearch().then(_ => { });
     }, [])
     const onChangePage = async (value) => {
         setCurrentPage(value)
-        await onSearch(searchText, pageSize, value, startDate, endDate).then(_ => { });
+        await onSearch(searchText, searchPosition, pageSize, value,).then(_ => { });
     }
     const onPageSizeChanged = async (value) => {
         setPageSize(value)
         setCurrentPage(1)
-        await onSearch(searchText, value, 1, startDate, endDate).then(_ => { });
+        await onSearch(searchText, searchPosition, value, 1,).then(_ => { });
     }
 
     const onOpenModalDelete = (id) => {
@@ -122,6 +127,33 @@ const ListEmployeeManagement = () => {
                                     disabled={false}
                                 />
                             </Col>
+                            <Col xs={24} sm={12} lg={8}>
+                                <Select
+                                    showSearch
+                                    allowClear={true}
+                                    showArrow
+                                    className="w-full text-left"
+                                    value={searchPosition}
+                                    listHeight={120}
+                                    onChange={onChangePosition}
+                                    placeholder="Tìm kiếm theo vị trí"
+                                    getPopupContainer={trigger => trigger.parentNode}
+                                >
+                                    {
+                                        positionState.data && positionState.data.length && positionState.data.map((item, index) => {
+                                            return (
+                                                <Select.Option
+                                                    key={index}
+                                                    value={item.name}
+                                                    title={item.name}
+                                                >
+                                                    {item.name}
+                                                </Select.Option>
+                                            )
+                                        })
+                                    }
+                                </Select>
+                            </Col>
                         </Row>
 
                     </Col>
@@ -156,6 +188,23 @@ const ListEmployeeManagement = () => {
                         }
                         key={"name"}
                         dataIndex={"name"}
+                    />
+                    <Column
+                        title={
+                            <TitleTableCommon
+                                title="Chức vụ"
+                                width="180px"
+                            />
+                        }
+                        key={"position"}
+                        dataIndex={"position"}
+                        render={(value, record) => {
+                            return (
+                                <div>
+                                    {value?.name}
+                                </div>
+                            )
+                        }}
                     />
                     <Column
                         title={
@@ -198,23 +247,6 @@ const ListEmployeeManagement = () => {
                         }
                         key={"cccd"}
                         dataIndex={"cccd"}
-                    />
-                    <Column
-                        title={
-                            <TitleTableCommon
-                                title="Chức vụ"
-                                width="300px"
-                            />
-                        }
-                        key={"position"}
-                        dataIndex={"position"}
-                        render={(value, record) => {
-                            return (
-                                <div>
-                                    {value?.name}
-                                </div>
-                            )
-                        }}
                     />
                     <Column
                         title={

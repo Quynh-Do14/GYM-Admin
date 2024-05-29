@@ -149,12 +149,12 @@ export const genderConfig = (gender) => {
         return Constants.Gender.FEMALE.label
     }
 }
-// export const configResultType = (type) => {
-//     let result = ""
-//     Constants.ResultType.List.map(it => {
-//         if (it.value == type) {
-//             result = it.label
-//         }
-//     })
-//     return result
-// }
+export const arrayBufferToBase64 = (buffer) => {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+};

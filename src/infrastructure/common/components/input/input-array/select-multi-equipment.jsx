@@ -3,8 +3,9 @@ import { MessageError } from '../../controls/MessageError';
 import { validateFields } from '../../../../helper/helper';
 import { Select } from 'antd';
 import roomService from '../../../../repositories/room/service/room.service';
+import equipmentService from '../../../../repositories/equipment/service/equipment.service';
 
-const InputSectArrayCommon = (props) => {
+const InputSelectEquipmentArrayCommon = (props) => {
     const {
         label,
         attribute,
@@ -19,14 +20,14 @@ const InputSectArrayCommon = (props) => {
         index,
         data
     } = props;
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(null);
     const [listRoom, setListRoom] = useState([]);
 
-    const onGetRoomAsync = async () => {
+    const onGetEquipmentAsync = async () => {
         const param = {
         }
         try {
-            await roomService.getRoom(
+            await equipmentService.getEquipment(
                 param,
                 () => { }
             ).then((res) => {
@@ -39,8 +40,9 @@ const InputSectArrayCommon = (props) => {
     }
 
     useEffect(() => {
-        onGetRoomAsync().then(() => { })
-    }, [])
+        onGetEquipmentAsync().then(() => { })
+    }, []);
+
     if (setValidateAllItems) {
         setValidateAllItems([index], () => {
             if (disabled) {
@@ -84,12 +86,15 @@ const InputSectArrayCommon = (props) => {
             setValue(data[index][attribute]);
         }
     }, [index, data, attribute]);
+
     useEffect(() => {
 
         if (submittedTime != null) {
             onBlur(true);
         }
     }, [submittedTime]);
+
+
     return (
         <div>
             <div className='mb-4 input-common'>
@@ -101,10 +106,10 @@ const InputSectArrayCommon = (props) => {
                 </div>
                 <div>
                     <Select
-                        showSearch={true}
+                        showSearch
                         allowClear={false}
                         showArrow
-                        className={`${validate[`${attribute}${index}`]?.isError ? "input-error" : ""} w-full text-left`}
+                        className={`${validate[attribute]?.isError ? "input-error" : ""} w-full text-left`}
                         disabled={disabled}
                         value={value}
                         listHeight={120}
@@ -134,4 +139,4 @@ const InputSectArrayCommon = (props) => {
 
     )
 }
-export default InputSectArrayCommon;
+export default InputSelectEquipmentArrayCommon;

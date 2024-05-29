@@ -50,7 +50,7 @@ const AddPackageManagement = () => {
         await setSubmittedTime(Date.now());
         if (isValidData()) {
             await packageService.addPackages({
-                image: avatar,
+                file: avatar,
                 name: dataPackage.name,
                 price: dataPackage.price,
                 duration: dataPackage.duration,

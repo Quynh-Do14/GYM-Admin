@@ -14,11 +14,15 @@ import InputSectArrayCommon from '../../infrastructure/common/components/input/i
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import InputNumberArrayCommon from '../../infrastructure/common/components/input/input-array/input-number';
 import InputSelectEmployeeByPositionCommon from '../../infrastructure/common/components/input/select-employee-by-position';
+import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
+import InputTextAreaCommon from '../../infrastructure/common/components/input/input-text-area';
 
 const AddBranchManagement = () => {
     const [validate, setValidate] = useState({});
     const [loading, setLoading] = useState(false);
     const [submittedTime, setSubmittedTime] = useState();
+    const [imageUrl, setImageUrl] = useState(null);
+    const [avatar, setAvatar] = useState(null);
 
     const [listRoom, setListRoom] = useState([
         {
@@ -26,7 +30,6 @@ const AddBranchManagement = () => {
             roomId: null,
             amount: null
         }
-
     ])
 
     const [_data, _setData] = useState({});
@@ -56,15 +59,20 @@ const AddBranchManagement = () => {
         return allRequestOK;
     };
     const onAddBranch = async () => {
+        const gymBranch_RoomDTO = {
+            branchGymName: dataBranch.branchGymName,
+            address: dataBranch.address,
+            description: dataBranch.description,
+            manager: {
+                id: Number(dataBranch.manager)
+            },
+            roomAndAmounts: convertListRoom()
+        }
         await setSubmittedTime(Date.now());
         if (isValidData()) {
             await branchService.addBranch({
-                branchGymName: dataBranch.branchGymName,
-                address: dataBranch.address,
-                manager: {
-                    id: Number(dataBranch.manager)
-                },
-                roomAndAmounts: convertListRoom()
+                file: avatar,
+                gymBranch_RoomDTO: JSON.stringify(gymBranch_RoomDTO)
             },
                 onBack,
                 setLoading
@@ -108,7 +116,15 @@ const AddBranchManagement = () => {
             <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
                 <div className='bg-white scroll-auto'>
                     <Row>
-                        <Col span={24} className='border-add'>
+                        <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
+                            <div className='legend-title'>Thêm mới ảnh</div>
+                            <UploadAvatar
+                                imageUrl={imageUrl}
+                                setAvatar={setAvatar}
+                                setImageUrl={setImageUrl}
+                            />
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={16} xl={18} xxl={19} className='border-add'>
                             <div className='legend-title'>Thêm thông tin mới</div>
                             <Row gutter={[30, 0]}>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
@@ -151,7 +167,19 @@ const AddBranchManagement = () => {
                                         disabledToDate={false}
                                     />
                                 </Col>
-
+                                <Col span={24}>
+                                    <InputTextAreaCommon
+                                        label={"Mô tả"}
+                                        attribute={"description"}
+                                        isRequired={true}
+                                        dataAttribute={dataBranch.description}
+                                        setData={setDataBranch}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                    />
+                                </Col>
                                 <Col span={24}>
                                     <div
                                         className='flex gap-2 items-center cursor-pointer bg-[#e1e1e1] p-2 rounded-[4px]'
@@ -209,7 +237,8 @@ const AddBranchManagement = () => {
                                                                     disabled={false}
                                                                     validate={validate}
                                                                     setValidate={setValidate}
-                                                                    submittedTime={submittedTime} index={index}
+                                                                    submittedTime={submittedTime}
+                                                                    index={index}
                                                                 />
                                                             </Col>
                                                         </Row>

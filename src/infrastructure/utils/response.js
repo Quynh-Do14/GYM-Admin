@@ -1,4 +1,5 @@
 import axiosInstance from "../../core/api/axiosInstance";
+import axiosInstanceFile from "../../core/api/axiosInstanceFile";
 
 export const RequestService = {
     async get(url, params = {}) {
@@ -33,6 +34,12 @@ export const RequestService = {
     },
     async delete(url) {
         let resp = await axiosInstance.delete(url);
+        return resp.data;
+    },
+    async getFile(url, params = {}) {
+        let resp = await axiosInstanceFile.get(url, {
+            params,
+        });
         return resp.data;
     },
 };

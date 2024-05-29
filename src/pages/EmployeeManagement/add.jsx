@@ -15,6 +15,7 @@ import InputSelectPositionCommon from '../../infrastructure/common/components/in
 import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
 import InputSelectCommon from '../../infrastructure/common/components/input/select-common';
 import Constants from '../../core/common/constant';
+import InputPasswordCommon from '../../infrastructure/common/components/input/input-password';
 
 const AddEmployeeManagement = () => {
     const [validate, setValidate] = useState({});
@@ -53,8 +54,11 @@ const AddEmployeeManagement = () => {
         await setSubmittedTime(Date.now());
         if (isValidData()) {
             await employeeService.addEmployee({
-                image: avatar,
+                // image: avatar,
                 name: dataEmployee.name,
+                // fullName: dataEmployee.fullName,
+                username: dataEmployee.username,
+                password: dataEmployee.password,
                 email: dataEmployee.email,
                 dob: convertDate(dataEmployee.dob),
                 sex: dataEmployee.sex,
@@ -83,7 +87,7 @@ const AddEmployeeManagement = () => {
             <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
                 <div className='bg-white scroll-auto'>
                     <Row>
-                        <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
+                        {/* <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
                             <div className='legend-title'>Thêm mới ảnh</div>
                             <UploadAvatar
                                 attributeImg={dataEmployee.image}
@@ -91,8 +95,8 @@ const AddEmployeeManagement = () => {
                                 setAvatar={setAvatar}
                                 setImageUrl={setImageUrl}
                             />
-                        </Col>
-                        <Col xs={24} sm={24} md={12} lg={16} xl={18} xxl={19} className='border-add'>
+                        </Col> */}
+                        <Col span={24} className='border-add'>
                             <div className='legend-title'>Thêm thông tin mới</div>
                             <Row gutter={[30, 0]}>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
@@ -114,6 +118,32 @@ const AddEmployeeManagement = () => {
                                         attribute={"email"}
                                         isRequired={true}
                                         dataAttribute={dataEmployee.email}
+                                        setData={setDataEmployee}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                    />
+                                </Col>
+                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                    <InputTextCommon
+                                        label={"Tên đăng nhập"}
+                                        attribute={"username"}
+                                        isRequired={true}
+                                        dataAttribute={dataEmployee.username}
+                                        setData={setDataEmployee}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                    />
+                                </Col>
+                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                    <InputPasswordCommon
+                                        label={"Mật khẩu"}
+                                        attribute={"password"}
+                                        isRequired={true}
+                                        dataAttribute={dataEmployee.password}
                                         setData={setDataEmployee}
                                         disabled={false}
                                         validate={validate}

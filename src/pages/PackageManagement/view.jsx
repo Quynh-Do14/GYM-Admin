@@ -11,6 +11,7 @@ import equipTypeService from '../../infrastructure/repositories/equip-type/servi
 import InputNumberCommon from '../../infrastructure/common/components/input/input-number';
 import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
 import packageService from '../../infrastructure/repositories/package/service/package.service';
+import { arrayBufferToBase64 } from '../../infrastructure/helper/helper';
 
 const ViewPackageManagement = () => {
     const [validate, setValidate] = useState({});
@@ -68,7 +69,7 @@ const ViewPackageManagement = () => {
     useEffect(() => {
         if (detailPackage) {
             setDataPackage({
-                image: detailPackage.image,
+                image: detailPackage?.image?.data,
                 name: detailPackage.name,
                 price: detailPackage.price,
                 duration: detailPackage.duration,
@@ -81,7 +82,7 @@ const ViewPackageManagement = () => {
             await packageService.updatePackages(
                 param.id,
                 {
-                    image: avatar,
+                    file: avatar ? avatar : imageUrl,
                     name: dataPackage.name,
                     price: dataPackage.price,
                     duration: dataPackage.duration,
@@ -94,7 +95,26 @@ const ViewPackageManagement = () => {
             WarningMessage("Nhập thiếu thông tin", "Vui lòng nhập đầy đủ thông tin")
         };
     };
-    console.log('dataPackage',dataPackage);
+
+    // const onGetAvatarsync = async () => {
+    //     try {
+    //         await packageService.getAvatar(
+    //             param.id,
+    //             setLoading
+    //         ).then((response) => {
+    //             const base64String = arrayBufferToBase64(response);
+    //             const imageSrc = `data:image/jpeg;base64,${base64String}`;
+    //             setImageUrl(imageSrc)
+    //         })
+    //     }
+    //     catch (error) {
+    //         console.error(error)
+    //     }
+    // }
+    // useEffect(() => {
+    //     onGetAvatarsync().then(() => { })
+    // }, [])
+
     return (
         <MainLayout breadcrumb={"Quản lý gói thành viên"} title={"Xem thông tin gói thành viên"} redirect={ROUTE_PATH.PACKAGE}>
             <div className='main-page h-100 flex-1 auto bg-white px-4 py-8'>
@@ -103,7 +123,7 @@ const ViewPackageManagement = () => {
                         <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
                             <div className='legend-title'>Thêm mới ảnh</div>
                             <UploadAvatar
-                                attributeImg={dataPackage.image}
+                                attributeImg={`data:image/jpeg;base64,${dataPackage.image}`}
                                 imageUrl={imageUrl}
                                 setAvatar={setAvatar}
                                 setImageUrl={setImageUrl}

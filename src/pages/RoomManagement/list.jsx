@@ -48,7 +48,7 @@ const ListRoomManagement = () => {
                 param,
                 setLoading
             ).then((res) => {
-                setListRoom(res)
+                setListRoom(res.content)
                 setTotal(res.totalElements)
             })
         }
@@ -151,7 +151,7 @@ const ListRoomManagement = () => {
                     <Column
                         title={
                             <TitleTableCommon
-                                title="phòng"
+                                title="Phòng"
                             />
                         }
                         key={"name"}

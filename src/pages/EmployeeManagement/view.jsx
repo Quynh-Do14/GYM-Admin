@@ -15,6 +15,7 @@ import { convertDate } from '../../infrastructure/helper/helper';
 import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
 import Constants from '../../core/common/constant';
 import InputSelectCommon from '../../infrastructure/common/components/input/select-common';
+import InputPasswordCommon from '../../infrastructure/common/components/input/input-password';
 
 const ViewEmployeeManagement = () => {
     const [validate, setValidate] = useState({});
@@ -77,6 +78,7 @@ const ViewEmployeeManagement = () => {
                 image: detailEmployee.image,
                 avatar: detailEmployee.avatar,
                 name: detailEmployee.name,
+                username: detailEmployee.username,
                 email: detailEmployee.email,
                 dob: detailEmployee.dob,
                 sex: detailEmployee.sex,
@@ -101,6 +103,7 @@ const ViewEmployeeManagement = () => {
                     image: avatar,
                     name: dataEmployee.name,
                     email: dataEmployee.email,
+                    username: dataEmployee.username,
                     dob: dataEmployee.dob !== detailEmployee.dob ? convertDate(dataEmployee.dob) : dataEmployee.dob,
                     sex: dataEmployee.sex,
                     role: dataEmployee.role,
@@ -128,7 +131,7 @@ const ViewEmployeeManagement = () => {
             <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
                 <div className='bg-white scroll-auto'>
                     <Row>
-                        <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
+                        {/* <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
                             <div className='legend-title'>Cập nhật ảnh</div>
                             <UploadAvatar
                                 attributeImg={dataEmployee.image}
@@ -136,8 +139,8 @@ const ViewEmployeeManagement = () => {
                                 setAvatar={setAvatar}
                                 setImageUrl={setImageUrl}
                             />
-                        </Col>
-                        <Col xs={24} sm={24} md={12} lg={16} xl={18} xxl={19} className='border-add'>
+                        </Col> */}
+                        <Col span={24} className='border-add'>
                             <div className='legend-title'>Cập nhật thông tin</div>
                             <Row gutter={[30, 0]}>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
@@ -157,10 +160,23 @@ const ViewEmployeeManagement = () => {
                                     <InputTextCommon
                                         label={"Email"}
                                         attribute={"email"}
-                                        isRequired={true}
+                                        isRequired={false}
                                         dataAttribute={dataEmployee.email}
                                         setData={setDataEmployee}
-                                        disabled={false}
+                                        disabled={true}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                    />
+                                </Col>
+                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                    <InputTextCommon
+                                        label={"Tên đăng nhập"}
+                                        attribute={"username"}
+                                        isRequired={false}
+                                        dataAttribute={dataEmployee.username}
+                                        setData={setDataEmployee}
+                                        disabled={true}
                                         validate={validate}
                                         setValidate={setValidate}
                                         submittedTime={submittedTime}

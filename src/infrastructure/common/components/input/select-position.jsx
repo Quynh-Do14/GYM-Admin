@@ -17,8 +17,8 @@ const InputSelectPositionCommon = (props) => {
         isRequired,
         label
     } = props;
-    const dataPosition = useRecoilValue(PositionState);
-    const [value, setValue] = useState(0);
+    const dataPosition = useRecoilValue(PositionState).data;
+    const [value, setValue] = useState("");
 
     const onChange = async (val) => {
         setValue(val || null);

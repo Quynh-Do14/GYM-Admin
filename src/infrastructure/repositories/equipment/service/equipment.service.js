@@ -46,7 +46,7 @@ class EquipmentService {
         setLoading(true)
         try {
             return await RequestService
-                .post(Endpoint.Equipment.Add,
+                .postForm(Endpoint.Equipment.Add,
                     data
                 )
                 .then(response => {
@@ -75,7 +75,7 @@ class EquipmentService {
         setLoading(true)
         try {
             return await RequestService
-                .put(`${Endpoint.Equipment.Update}/${id}`,
+                .putForm(`${Endpoint.Equipment.Update}/${id}`,
                     data
                 )
                 .then(response => {
@@ -108,6 +108,21 @@ class EquipmentService {
                     return response;
                 });
         } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    }
+    async getAvatar(id, setLoading) {
+        setLoading(true)
+
+        try {
+            return await RequestService.
+                getFile(`${Endpoint.Equipment.Get}/${id}/image`).then(response => {
+                    return response;
+                });
+        }
+        catch (error) {
             console.error(error)
         } finally {
             setLoading(false);

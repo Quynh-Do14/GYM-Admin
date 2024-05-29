@@ -4,6 +4,7 @@ export const ROUTE_PATH = {
     LOGIN: `${PREFIX}/login`,
     REGISTER: `${PREFIX}/register`,
 
+    DASHBOARD: `${PREFIX}/dashboard`,
     BRANCH: `${PREFIX}/gym-branches`,
     VIEW_BRANCH: `${PREFIX}/gym-branches/view/:id`,
     ADD_BRANCH: `${PREFIX}/gym-branches/add`,

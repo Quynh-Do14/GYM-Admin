@@ -7,23 +7,28 @@ export class Endpoint {
     static User = class {
         static Get = "/users"
     }
+    static Dashboard = class {
+        static Get = "/reports/revenue"
+    }
     static Employee = class {
         static Get = "/employees"
-        static Add = "/employees/add"
-        static Update = "/employees/update"
+        static GetById = "/employees/admin"
+        static Add = "/employees/admin/add"
+        static Update = "/employees/admin/update"
         static Delete = "/employees/delete"
     }
     static Branch = class {
         static Get = "/gym-branches"
         static GetById = "/gym-branches/admin"
-        static Add = "/gym-branches/add"
-        static Update = "/gym-branches/update"
-        static Delete = "/gym-branches/delete"
+        static Add = "/gym-branches/admin/add"
+        static Update = "/gym-branches/admin/update"
+        static Delete = "/gym-branches/admin/delete"
     }
     static Room = class {
         static Get = "/rooms"
-        static Add = "/rooms/add"
-        static Update = "/rooms/update"
+        static GetById = "/rooms/admin"
+        static Add = "/rooms/admin/add"
+        static Update = "/rooms/admin/update"
         static Delete = "/rooms/delete"
     }
     static Position = class {
@@ -34,8 +39,8 @@ export class Endpoint {
     }
     static Equipment = class {
         static Get = "/equipments"
-        static Add = "/equipments/add"
-        static Update = "equipments/update"
+        static Add = "/equipments/admin/add"
+        static Update = "equipments/admin/update"
         static Delete = "/equipments/delete"
     }
     static EquipType = class {
@@ -53,9 +58,9 @@ export class Endpoint {
     }
     static Packages = class {
         static Get = "/packages"
-        static Add = "/packages/add"
-        static Update = "/packages/update"
-        static Delete = "/packages/delete"
+        static Add = "/packages/admin/add"
+        static Update = "/packages/admin/update"
+        static Delete = "/packages/admin/delete"
     }
     static Booking = class {
         static Get = "/bookings/admin/all"

@@ -11,7 +11,7 @@ import InputSelectGenderCommon from '../../infrastructure/common/components/inpu
 import InputSelectPositionCommon from '../../infrastructure/common/components/input/select-position';
 import employeeService from '../../infrastructure/repositories/employee/service/employee.service';
 import { WarningMessage } from '../../infrastructure/common/components/toast/notificationToast';
-import { convertDate } from '../../infrastructure/helper/helper';
+import { arrayBufferToBase64, convertDate } from '../../infrastructure/helper/helper';
 import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
 import Constants from '../../core/common/constant';
 import InputSelectCommon from '../../infrastructure/common/components/input/select-common';
@@ -20,12 +20,15 @@ import InputSectArrayCommon from '../../infrastructure/common/components/input/i
 import InputNumberArrayCommon from '../../infrastructure/common/components/input/input-array/input-number';
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import InputSelectEmployeeByPositionCommon from '../../infrastructure/common/components/input/select-employee-by-position';
+import InputTextAreaCommon from '../../infrastructure/common/components/input/input-text-area';
 
 const ViewBranchManagement = () => {
     const [validate, setValidate] = useState({});
     const [loading, setLoading] = useState(false);
     const [submittedTime, setSubmittedTime] = useState();
     const [detailBranch, setDetailBranch] = useState({});
+    const [imageUrl, setImageUrl] = useState(null);
+    const [avatar, setAvatar] = useState(null);
 
     const [listRoom, setListRoom] = useState([
         {
@@ -88,7 +91,8 @@ const ViewBranchManagement = () => {
             setDataBranch({
                 branchGymName: detailBranch.branchGymName,
                 address: detailBranch.address,
-                manager: detailBranch?.manager?.id
+                manager: detailBranch?.manager?.id,
+                description: detailBranch.description,
             });
             const newArr = detailBranch.roomAndAmounts?.map((it) => {
                 return {
@@ -102,17 +106,22 @@ const ViewBranchManagement = () => {
     }, [detailBranch]);
 
     const onUpdateEmployee = async () => {
+        const gymBranch_RoomDTO = {
+            branchGymName: dataBranch.branchGymName,
+            address: dataBranch.address,
+            description: dataBranch.description,
+            manager: {
+                id: Number(dataBranch.manager)
+            },
+            roomAndAmounts: convertListRoom()
+        }
         await setSubmittedTime(Date.now());
         if (isValidData()) {
             await branchService.updateBranch(
                 param.id,
                 {
-                    branchGymName: dataBranch.branchGymName,
-                    address: dataBranch.address,
-                    manager: {
-                        id: Number(dataBranch.manager)
-                    },
-                    roomAndAmounts: convertListRoom()
+                    file: avatar ? avatar : imageUrl,
+                    gymBranch_RoomDTO: JSON.stringify(gymBranch_RoomDTO)
                 },
                 onBack,
                 setLoading
@@ -150,12 +159,38 @@ const ViewBranchManagement = () => {
         return arr
     }
 
+    const onGetAvatarsync = async () => {
+        try {
+            await branchService.getAvatar(
+                param.id,
+                setLoading
+            ).then((response) => {
+                const base64String = arrayBufferToBase64(response);
+                const imageSrc = `data:image/jpeg;base64,${base64String}`;
+                setImageUrl(imageSrc)
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        onGetAvatarsync().then(() => { })
+    }, [])
     return (
         <MainLayout breadcrumb={"Quản lý chi nhánh"} title={"Xem thông tin chi nhánh"} redirect={ROUTE_PATH.BRANCH}>
             <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
                 <div className='bg-white scroll-auto'>
                     <Row>
-                        <Col span={24} className='border-add'>
+                        <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
+                            <div className='legend-title'>Thêm mới ảnh</div>
+                            <UploadAvatar
+                                imageUrl={imageUrl}
+                                setAvatar={setAvatar}
+                                setImageUrl={setImageUrl}
+                            />
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={16} xl={18} xxl={19} className='border-add'>
                             <div className='legend-title'>Cập nhật thông tin</div>
                             <Row gutter={[30, 0]}>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
@@ -198,7 +233,19 @@ const ViewBranchManagement = () => {
                                         disabledToDate={false}
                                     />
                                 </Col>
-
+                                <Col span={24}>
+                                    <InputTextAreaCommon
+                                        label={"Mô tả"}
+                                        attribute={"description"}
+                                        isRequired={true}
+                                        dataAttribute={dataBranch.description}
+                                        setData={setDataBranch}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                    />
+                                </Col>
                                 <Col span={24}>
                                     <div
                                         className='flex gap-2 items-center cursor-pointer bg-[#e1e1e1] p-2 rounded-[4px]'
