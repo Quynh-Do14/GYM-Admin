@@ -11,11 +11,14 @@ import roomService from '../../infrastructure/repositories/room/service/room.ser
 import InputNumberArrayCommon from '../../infrastructure/common/components/input/input-array/input-number';
 import InputSelectEquipmentArrayCommon from '../../infrastructure/common/components/input/input-array/select-multi-equipment';
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
 
 const AddRoomManagement = () => {
     const [validate, setValidate] = useState({});
     const [loading, setLoading] = useState(false);
     const [submittedTime, setSubmittedTime] = useState();
+    const [imageUrl, setImageUrl] = useState(null);
+    const [avatar, setAvatar] = useState(null);
 
     const [listEquipment, setListEquipment] = useState([
         {
@@ -25,7 +28,7 @@ const AddRoomManagement = () => {
         }
 
     ])
-
+    console.log("validate", validate);
     const [_data, _setData] = useState({});
     const dataRoom = _data;
 
@@ -53,11 +56,15 @@ const AddRoomManagement = () => {
         return allRequestOK;
     };
     const onAddRoomAsync = async () => {
+        const equipment_RoomDTO = {
+            name: dataRoom.name,
+            equipmentAmounts: convertListEquipment()
+        }
         await setSubmittedTime(Date.now());
         if (isValidData()) {
             await roomService.addRoom({
-                name: dataRoom.name,
-                equipmentAmounts: convertListEquipment()
+                file: avatar,
+                equipment_RoomDTO: JSON.stringify(equipment_RoomDTO)
             },
                 onBack,
                 setLoading
@@ -79,10 +86,13 @@ const AddRoomManagement = () => {
         ])
     }
 
-    const onDeleteOption = (index) => {
+    const onDeleteOption = (it, index) => {
+        console.log("it", it);
         const spliceOption = [...listEquipment];
         spliceOption.splice(index, 1)
         setListEquipment(spliceOption)
+        delete validate[`equipmentId${index}`];
+        delete validate[`amount${index}`];
     }
     const convertListEquipment = () => {
         const arr = listEquipment.map((it) => {
@@ -102,7 +112,15 @@ const AddRoomManagement = () => {
             <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
                 <div className='bg-white scroll-auto'>
                     <Row>
-                        <Col span={24} className='border-add'>
+                        <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
+                            <div className='legend-title'>Thêm mới ảnh</div>
+                            <UploadAvatar
+                                imageUrl={imageUrl}
+                                setAvatar={setAvatar}
+                                setImageUrl={setImageUrl}
+                            />
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={16} xl={18} xxl={19} className='border-add'>
                             <div className='legend-title'>Thêm thông tin mới</div>
                             <Row gutter={[30, 0]}>
                                 <Col span={24}>
@@ -140,7 +158,7 @@ const AddRoomManagement = () => {
                                                             </div>
                                                             <button
                                                                 disabled={Number(index) == 0 ? true : false}
-                                                                onClick={() => onDeleteOption(index)}
+                                                                onClick={() => onDeleteOption(it, index)}
 
                                                             >
                                                                 <DeleteOutlined

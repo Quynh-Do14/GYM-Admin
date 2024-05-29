@@ -6,27 +6,21 @@ import InputTextCommon from '../../infrastructure/common/components/input/input-
 import { ButtonCommon } from '../../infrastructure/common/components/button/button-common';
 import { FullPageLoading } from '../../infrastructure/common/components/controls/loading';
 import { useNavigate, useParams } from 'react-router-dom';
-import InputDateCommon from '../../infrastructure/common/components/input/input-date';
-import InputSelectGenderCommon from '../../infrastructure/common/components/input/select-category';
-import InputSelectPositionCommon from '../../infrastructure/common/components/input/select-position';
-import employeeService from '../../infrastructure/repositories/employee/service/employee.service';
 import { WarningMessage } from '../../infrastructure/common/components/toast/notificationToast';
-import { convertDate } from '../../infrastructure/helper/helper';
-import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
-import Constants from '../../core/common/constant';
-import InputSelectCommon from '../../infrastructure/common/components/input/select-common';
-import branchService from '../../infrastructure/repositories/branch/service/branch.service';
-import InputMultiEquipmentCommon from '../../infrastructure/common/components/input/select-multi-equipment';
 import roomService from '../../infrastructure/repositories/room/service/room.service';
 import { DeleteOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import InputSelectEquipmentArrayCommon from '../../infrastructure/common/components/input/input-array/select-multi-equipment';
 import InputNumberArrayCommon from '../../infrastructure/common/components/input/input-array/input-number';
+import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
+import { arrayBufferToBase64 } from '../../infrastructure/helper/helper';
 
 const ViewRoomManagement = () => {
     const [validate, setValidate] = useState({});
     const [loading, setLoading] = useState(false);
     const [submittedTime, setSubmittedTime] = useState();
     const [detailRoom, setDetailRoom] = useState({});
+    const [imageUrl, setImageUrl] = useState(null);
+    const [avatar, setAvatar] = useState(null);
 
     const [listEquipment, setListEquipment] = useState([
         {
@@ -101,13 +95,18 @@ const ViewRoomManagement = () => {
     }, [detailRoom]);
 
     const onUpdateRoom = async () => {
+        const equipment_RoomDTO = {
+            name: dataRoom.name,
+            equipmentAmounts: convertListEquipment()
+        }
         await setSubmittedTime(Date.now());
         if (isValidData()) {
             await roomService.updateRoom(
                 param.id,
                 {
-                    name: dataRoom.name,
-                    equipmentAmounts: convertListEquipment()
+                    file: avatar ? avatar : imageUrl,
+                    equipment_RoomDTO: JSON.stringify(equipment_RoomDTO)
+
                 },
                 onBack,
                 setLoading
@@ -146,12 +145,39 @@ const ViewRoomManagement = () => {
         return arr
     }
 
+    const onGeAvatarsync = async () => {
+        try {
+            await roomService.getAvatar(
+                param.id,
+                setLoading
+            ).then((response) => {
+                const base64String = arrayBufferToBase64(response);
+                const imageSrc = `data:image/jpeg;base64,${base64String}`;
+                setImageUrl(imageSrc)
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        onGeAvatarsync().then(() => { })
+    }, [])
+
     return (
         <MainLayout breadcrumb={"Quản lý chi nhánh"} title={"Xem thông tin chi nhánh"} redirect={ROUTE_PATH.ROOM}>
             <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
                 <div className='bg-white scroll-auto'>
                     <Row>
-                        <Col span={24} className='border-add'>
+                        <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
+                            <div className='legend-title'>Thêm mới ảnh</div>
+                            <UploadAvatar
+                                imageUrl={imageUrl}
+                                setAvatar={setAvatar}
+                                setImageUrl={setImageUrl}
+                            />
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={16} xl={18} xxl={19} className='border-add'>
                             <div className='legend-title'>Cập nhật thông tin</div>
                             <Row gutter={[30, 0]}>
                                 <Col span={24}>

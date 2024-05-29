@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { Col, Input, Row } from 'antd';
-import { validateFields } from '../../../utils/helper';
+import { Input } from 'antd';
+import "../../../../assets/styles/components/input.css"
+import { validateCMND, validateEmail, validateFormInputNumber, validatePhoneNumber } from '../../../helper/validate';
+import { validateFields } from '../../../helper/helper';
 import { MessageError } from '../controls/MessageError';
-import '../../../../assets/css/common/input.css'
-import { validateEmail, validatePhoneNumber } from '../../../utils/validate';
+
 const { TextArea } = Input
 const InputTextAreaCommon = (props) => {
     const {

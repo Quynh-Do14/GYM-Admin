@@ -46,7 +46,7 @@ class RoomService {
         setLoading(true)
         try {
             return await RequestService
-                .post(Endpoint.Room.Add,
+                .postForm(Endpoint.Room.Add,
                     data
                 )
                 .then(response => {
@@ -69,7 +69,7 @@ class RoomService {
         setLoading(true)
         try {
             return await RequestService
-                .put(`${Endpoint.Room.Update}/${id}`,
+                .putForm(`${Endpoint.Room.Update}/${id}`,
                     data
                 )
                 .then(response => {
@@ -103,6 +103,21 @@ class RoomService {
                 });
         } catch (error) {
             FailMessage("Xóa không thành công", "Vui lòng kiểm tra thông tin")
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    }
+    async getAvatar(id, setLoading) {
+        setLoading(true)
+
+        try {
+            return await RequestService.
+                getFile(`${Endpoint.Room.Get}/${id}/image`).then(response => {
+                    return response;
+                });
+        }
+        catch (error) {
             console.error(error)
         } finally {
             setLoading(false);

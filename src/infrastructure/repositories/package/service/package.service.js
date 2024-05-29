@@ -108,6 +108,21 @@ class PackagesService {
             setLoading(false);
         }
     }
+    async getAvatar(id, setLoading) {
+        setLoading(true)
+
+        try {
+            return await RequestService.
+                getFile(`${Endpoint.Packages.Get}/${id}/image`).then(response => {
+                    return response;
+                });
+        }
+        catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    }
 }
 
 export default new PackagesService();

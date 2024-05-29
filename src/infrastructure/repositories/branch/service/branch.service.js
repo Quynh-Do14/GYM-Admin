@@ -1,5 +1,6 @@
 import { Endpoint } from "../../../../core/common/apiLink";
 import { FailMessage, SuccessMessage } from "../../../common/components/toast/notificationToast";
+import { messageConfig } from "../../../helper/message";
 import { RequestService } from "../../../utils/response";
 import { saveToken } from "../../../utils/storage";
 
@@ -46,7 +47,7 @@ class BranchService {
         setLoading(true)
         try {
             return await RequestService
-                .post(Endpoint.Branch.Add,
+                .postForm(Endpoint.Branch.Add,
                     data
                 )
                 .then(response => {
@@ -59,7 +60,7 @@ class BranchService {
                     return response;
                 });
         } catch (error) {
-            FailMessage("Thêm mới không thành công", "Vui lòng kiểm tra thông tin")
+            FailMessage("Thêm mới không thành công", messageConfig(error.response.data.message))
             console.error(error)
         } finally {
             setLoading(false);
@@ -69,7 +70,7 @@ class BranchService {
         setLoading(true)
         try {
             return await RequestService
-                .put(`${Endpoint.Branch.Update}/${id}`,
+                .putForm(`${Endpoint.Branch.Update}/${id}`,
                     data
                 )
                 .then(response => {
@@ -82,7 +83,7 @@ class BranchService {
                     return response;
                 });
         } catch (error) {
-            FailMessage("Cập nhật không thành công", "Vui lòng kiểm tra thông tin")
+            FailMessage("Cập nhật không thành công", messageConfig(error.response.data.message))
             console.error(error)
         } finally {
             setLoading(false);
@@ -107,7 +108,23 @@ class BranchService {
         } finally {
             setLoading(false);
         }
+    };
+    async getAvatar(id, setLoading) {
+        setLoading(true)
+
+        try {
+            return await RequestService.
+                getFile(`${Endpoint.Branch.Get}/${id}/image`).then(response => {
+                    return response;
+                });
+        }
+        catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
     }
+
 }
 
 export default new BranchService();

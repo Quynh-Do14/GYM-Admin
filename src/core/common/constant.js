@@ -1,9 +1,14 @@
-import { ContainerOutlined, DatabaseOutlined, EnvironmentOutlined, MessageOutlined, OneToOneOutlined, ProjectOutlined, ScheduleOutlined, TagsOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
+import { ContainerOutlined, DatabaseOutlined, EnvironmentOutlined, LineChartOutlined, MessageOutlined, OneToOneOutlined, ProjectOutlined, ScheduleOutlined, TagsOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
 import { ROUTE_PATH } from "./appRouter";
 
 export default class Constants {
     static Menu = class {
         static List = [
+            {
+                label: "Dashboard",
+                link: ROUTE_PATH.DASHBOARD,
+                icon: <LineChartOutlined />
+            },
             {
                 label: "Quản lý chi nhánh",
                 link: ROUTE_PATH.BRANCH,

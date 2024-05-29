@@ -30,7 +30,7 @@ const InputSelectEmployeeByPositionCommon = (props) => {
 
     const onGetEmployeeAsync = async () => {
         const param = {
-
+            positionName:"Quản lý"
         }
         try {
             await employeeService.getEmployee(

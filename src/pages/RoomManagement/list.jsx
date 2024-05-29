@@ -151,7 +151,7 @@ const ListRoomManagement = () => {
                     <Column
                         title={
                             <TitleTableCommon
-                                title="phòng"
+                                title="Phòng"
                             />
                         }
                         key={"name"}

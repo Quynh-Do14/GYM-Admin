@@ -19,7 +19,7 @@ const InputSectArrayCommon = (props) => {
         index,
         data
     } = props;
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState(0);
     const [listRoom, setListRoom] = useState([]);
 
     const onGetRoomAsync = async () => {
@@ -77,21 +77,13 @@ const InputSectArrayCommon = (props) => {
         if (isRequired) {
             validateFields(isImplicitChange, `${attribute}${index}`, !value, setValidate, validate, !value ? `Vui lòng nhập ${labelLower}` : "");
         }
-        // data?.map((it) => {
-        //     if (it.roomId == value) {
-        //         let condition = it.roomId == value
-        //         console.log(true);
-        //         validateFields(isImplicitChange, `${attribute}${index}`, !condition, setValidate, validate, !condition ? `Phòng này đã được chọn rồi. Vui lòng chọn phòng khác` : "");
-        //     }
-        // })
     };
-    console.log("validate", validate);
+
     useEffect(() => {
         if (data[index]) {
             setValue(data[index][attribute]);
         }
     }, [index, data, attribute]);
-    console.log("data",data);
     useEffect(() => {
 
         if (submittedTime != null) {

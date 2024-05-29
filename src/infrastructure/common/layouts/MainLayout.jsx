@@ -75,7 +75,9 @@ const MainLayout = ({ ...props }) => {
                 param,
                 setLoading
             ).then((res) => {
-                setDataPosition(res.content)
+                setDataPosition({
+                    data: res.content
+                })
             })
         }
         catch (error) {

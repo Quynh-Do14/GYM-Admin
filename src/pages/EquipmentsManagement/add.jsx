@@ -50,10 +50,9 @@ const AddEquipmentManagement = () => {
         await setSubmittedTime(Date.now());
         if (isValidData()) {
             await equipmentService.addEquipment({
+                file: avatar,
                 name: dataEquipment.name,
-                equipType: {
-                    id: dataEquipment.equipType,
-                },
+                equipType: dataEquipment.equipType,
                 quantity: dataEquipment.quantity,
                 price: dataEquipment.price,
                 madein: dataEquipment.madein,

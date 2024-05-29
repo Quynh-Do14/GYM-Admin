@@ -20,7 +20,7 @@ import branchService from '../../infrastructure/repositories/branch/service/bran
 
 let timeout
 const ListBranchManagement = () => {
-    const [listEmployee, setListEmployee] = useState([])
+    const [listBranch, setListBranch] = useState([])
     const [total, setTotal] = useState(0)
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
@@ -47,7 +47,7 @@ const ListBranchManagement = () => {
                 param,
                 setLoading
             ).then((res) => {
-                setListEmployee(res.content)
+                setListBranch(res.content)
                 setTotal(res.totalElements)
             })
         }
@@ -149,7 +149,7 @@ const ListBranchManagement = () => {
             </div>
             <div className='flex-1 overflow-auto bg-[#FFFFFF] content-page'>
                 <Table
-                    dataSource={listEmployee}
+                    dataSource={listBranch}
                     pagination={false}
                     className='table-common'
                 >
@@ -183,6 +183,16 @@ const ListBranchManagement = () => {
                         }
                         key={"address"}
                         dataIndex={"address"}
+                    />
+                    <Column
+                        title={
+                            <TitleTableCommon
+                                title="Thành viên"
+                                width="100px"
+                            />
+                        }
+                        key={"totalMember"}
+                        dataIndex={"totalMember"}
                     />
                     <Column
                         title={

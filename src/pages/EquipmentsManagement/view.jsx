@@ -11,6 +11,7 @@ import { WarningMessage } from '../../infrastructure/common/components/toast/not
 import UploadAvatar from '../../infrastructure/common/components/input/upload-file';
 import InputNumberCommon from '../../infrastructure/common/components/input/input-number';
 import InputEquipTypeCommon from '../../infrastructure/common/components/input/select-equip-type';
+import { arrayBufferToBase64 } from '../../infrastructure/helper/helper';
 
 const ViewEquipmentManagement = () => {
     const [validate, setValidate] = useState({});
@@ -85,10 +86,9 @@ const ViewEquipmentManagement = () => {
             await equipmentService.updateEquipment(
                 param.id,
                 {
+                    file: avatar ? avatar : imageUrl,
                     name: dataEquipment.name,
-                    equipType: {
-                        id: dataEquipment.equipType,
-                    },
+                    equipType: dataEquipment.equipType,
                     quantity: dataEquipment.quantity,
                     price: dataEquipment.price,
                     madein: dataEquipment.madein,
@@ -101,6 +101,25 @@ const ViewEquipmentManagement = () => {
             WarningMessage("Nhập thiếu thông tin", "Vui lòng nhập đầy đủ thông tin")
         };
     };
+
+    const onGetAvatarsync = async () => {
+        try {
+            await equipmentService.getAvatar(
+                param.id,
+                setLoading
+            ).then((response) => {
+                const base64String = arrayBufferToBase64(response);
+                const imageSrc = `data:image/jpeg;base64,${base64String}`;
+                setImageUrl(imageSrc)
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        onGetAvatarsync().then(() => { })
+    }, [])
 
     return (
         <MainLayout breadcrumb={"Quản lý dụng cụ"} title={"Xem thông tin dụng cụ"} redirect={ROUTE_PATH.EMPLOYEE}>

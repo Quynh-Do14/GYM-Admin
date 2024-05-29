@@ -28,7 +28,7 @@ class EmployeeService {
         setLoading(true)
         try {
             return await RequestService
-                .get(`${Endpoint.Employee.Get}/${id}`)
+                .get(`${Endpoint.Employee.GetById}/${id}`)
                 .then(response => {
                     if (response) {
                         return response
@@ -46,7 +46,7 @@ class EmployeeService {
         setLoading(true)
         try {
             return await RequestService
-                .postForm(Endpoint.Employee.Add,
+                .post(Endpoint.Employee.Add,
                     data
                 )
                 .then(response => {
