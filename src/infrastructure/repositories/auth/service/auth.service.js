@@ -102,6 +102,25 @@ class AuthService {
         }
     }
 
+    async updateProfile(data, setLoading) {
+        setLoading(true)
+
+        try {
+            return await RequestService.putForm(Endpoint.Auth.UpdateProfile,
+                { ...data }
+            ).then(response => {
+                SuccessMessage(`Cập nhật thành công`);
+                return response;
+            });
+        }
+        catch (error) {
+            console.log(error)
+            FailMessage(`Cập nhật không thành công`);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     // async register(data, setLoading) {
     //     setLoading(true)
     //     try {

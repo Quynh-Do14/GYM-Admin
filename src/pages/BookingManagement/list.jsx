@@ -17,6 +17,7 @@ import { ROUTE_PATH } from '../../core/common/appRouter'
 import { useNavigate } from 'react-router-dom';
 import DialogConfirmCommon from '../../infrastructure/common/components/modal/dialogConfirm'
 import bookingService from '../../infrastructure/repositories/booking/service/booking.service'
+import { ActionDeleteCommon } from '../../infrastructure/common/components/action/action-delete'
 
 let timeout
 const ListBookingManagement = () => {
@@ -231,8 +232,7 @@ const ListBookingManagement = () => {
                             //         <MenuOutlined className="pointer" />
                             //     </Dropdown>
                             // </Space>
-                            <ActionCommon
-                                onClickDetail={() => onNavigate(record.id)}
+                            <ActionDeleteCommon
                                 onClickDelete={() => onOpenModalDelete(record.id)}
                             />
                         )}

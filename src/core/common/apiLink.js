@@ -3,6 +3,7 @@ export class Endpoint {
         // static Login = "/auth/login";
         static Login = "/login"
         static Profile = "/profile"
+        static UpdateProfile = "/profile/update"
     }
     static User = class {
         static Get = "/users"
