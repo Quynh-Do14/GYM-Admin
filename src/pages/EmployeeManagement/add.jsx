@@ -54,7 +54,7 @@ const AddEmployeeManagement = () => {
         await setSubmittedTime(Date.now());
         if (isValidData()) {
             await employeeService.addEmployee({
-                // image: avatar,
+                file: avatar,
                 name: dataEmployee.name,
                 // fullName: dataEmployee.fullName,
                 username: dataEmployee.username,
@@ -68,14 +68,12 @@ const AddEmployeeManagement = () => {
                 lastName: dataEmployee.lastName,
                 sdt: dataEmployee.sdt,
                 address: dataEmployee.address,
-                position: {
-                    id: dataEmployee.position
-                },
+                position: dataEmployee.position,
                 startWork: convertDate(dataEmployee.startWork)
             },
                 onBack,
                 setLoading
-            )   
+            )
         }
         else {
             WarningMessage("Nhập thiếu thông tin", "Vui lòng nhập đầy đủ thông tin")
@@ -87,7 +85,7 @@ const AddEmployeeManagement = () => {
             <div className='main-page h-full flex-1 overflow-auto bg-white px-4 py-8'>
                 <div className='bg-white scroll-auto'>
                     <Row>
-                        {/* <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
+                        <Col xs={24} sm={24} md={12} lg={8} xl={6} xxl={5} className='border-add flex justify-center'>
                             <div className='legend-title'>Thêm mới ảnh</div>
                             <UploadAvatar
                                 attributeImg={dataEmployee.image}
@@ -95,8 +93,8 @@ const AddEmployeeManagement = () => {
                                 setAvatar={setAvatar}
                                 setImageUrl={setImageUrl}
                             />
-                        </Col> */}
-                        <Col span={24} className='border-add'>
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={16} xl={18} xxl={19} className='border-add'>
                             <div className='legend-title'>Thêm thông tin mới</div>
                             <Row gutter={[30, 0]}>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
