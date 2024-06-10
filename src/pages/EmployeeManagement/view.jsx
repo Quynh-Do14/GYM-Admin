@@ -112,9 +112,7 @@ const ViewEmployeeManagement = () => {
                     lastName: dataEmployee.lastName,
                     sdt: dataEmployee.sdt,
                     address: dataEmployee.address,
-                    position: {
-                        id: dataEmployee.position
-                    },
+                    position: dataEmployee.position,
                     startWork: dataEmployee.startWork !== detailEmployee.startWork ? convertDate(dataEmployee.startWork) : dataEmployee.startWork,
                 },
                 onBack,
