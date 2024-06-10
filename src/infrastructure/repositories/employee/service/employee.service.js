@@ -46,7 +46,7 @@ class EmployeeService {
         setLoading(true)
         try {
             return await RequestService
-                .post(Endpoint.Employee.Add,
+                .postForm(Endpoint.Employee.Add,
                     data
                 )
                 .then(response => {
