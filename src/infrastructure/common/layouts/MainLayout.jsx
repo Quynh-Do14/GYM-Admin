@@ -13,12 +13,15 @@ import positionService from '../../repositories/position/service/position.servic
 import { useRecoilState } from 'recoil';
 import { PositionState } from '../../../core/atoms/position/positionState';
 import { MemberCardState } from '../../../core/atoms/memberCard/memberCardState';
+import ProfileModal from './Profile';
 
 const { Header, Content, Sider } = Layout;
 
 const MainLayout = ({ ...props }) => {
     const { pageName, title, breadcrumb, redirect } = props
     const [isOpenModalLogout, setIsOpenModalLogout] = useState(false);
+    const [isOpenModalProfile, setIsOpenModalProfile] = useState(false);
+
     const [collapsed, setCollapsed] = useState(false);
 
     const [loading, setLoading] = useState(false);
@@ -88,27 +91,18 @@ const MainLayout = ({ ...props }) => {
         onGetPositionAsync().then(_ => { });
     }, []);
 
-    // const onGetMemberCardAsync = async () => {
-    //     const param = {}
-    //     try {
-    //         await memberCardService.getMemberCard(
-    //             param,
-    //             setLoading
-    //         ).then((res) => {
-    //             setDataMemberCard(res.content)
-    //         })
-    //     }
-    //     catch (error) {
-    //         console.error(error)
-    //     }
-    // }
-    // useEffect(() => {
-    //     onGetMemberCardAsync().then(_ => { });
-    // }, []);
+
+    const openModalProfile = () => {
+        setIsOpenModalProfile(true);
+    };
+
+    const closeModalProfile = () => {
+        setIsOpenModalProfile(false);
+    };
     const listAction = () => {
         return (
             <Menu className='action-admin'>
-                <Menu.Item className='info-admin'>
+                <Menu.Item className='info-admin' onClick={openModalProfile}>
                     <div className='info-admin-title px-1 py-2 flex align-middle hover:text-[#5e5eff]'>
                         <svg className='mr-1-5' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="5" r="4" />
@@ -208,6 +202,11 @@ const MainLayout = ({ ...props }) => {
                 handleCancel={closeModalLogout}
                 handleOk={onLogOut}
                 title={"Xác nhận"}
+            />
+            <ProfileModal
+                visible={isOpenModalProfile}
+                handleCancel={closeModalProfile}
+                isLoading={setLoading}
             />
         </div>
     )
