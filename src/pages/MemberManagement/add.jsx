@@ -13,6 +13,7 @@ import memberService from '../../infrastructure/repositories/member/service/memb
 import InputSelectMemberCardCommon from '../../infrastructure/common/components/input/select-member-card';
 import Constants from '../../core/common/constant';
 import InputSelectCommon from '../../infrastructure/common/components/input/select-common';
+import InputPasswordCommon from '../../infrastructure/common/components/input/input-password';
 
 const AddMemberManagement = () => {
     const [validate, setValidate] = useState({});
