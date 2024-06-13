@@ -55,7 +55,7 @@ const AddMemberManagement = () => {
             await memberService.addMember({
                 name: dataMember.name,
                 email: dataMember.email,
-                password: dataEmployee.password,
+                password: dataMember.password,
                 sex: dataMember.sex,
                 role: dataMember.role,
                 cccd: dataMember.cccd,
