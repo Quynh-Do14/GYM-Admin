@@ -54,6 +54,7 @@ const AddMemberManagement = () => {
             await memberService.addMember({
                 name: dataMember.name,
                 email: dataMember.email,
+                password: dataEmployee.password,
                 sex: dataMember.sex,
                 role: dataMember.role,
                 cccd: dataMember.cccd,
@@ -118,6 +119,19 @@ const AddMemberManagement = () => {
                                         attribute={"email"}
                                         isRequired={true}
                                         dataAttribute={dataMember.email}
+                                        setData={setDataMember}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                    />
+                                </Col>
+                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                    <InputPasswordCommon
+                                        label={"Mật khẩu"}
+                                        attribute={"password"}
+                                        isRequired={true}
+                                        dataAttribute={dataMember.password}
                                         setData={setDataMember}
                                         disabled={false}
                                         validate={validate}
