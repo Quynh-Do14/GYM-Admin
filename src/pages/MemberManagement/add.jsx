@@ -13,6 +13,7 @@ import memberService from '../../infrastructure/repositories/member/service/memb
 import InputSelectMemberCardCommon from '../../infrastructure/common/components/input/select-member-card';
 import Constants from '../../core/common/constant';
 import InputSelectCommon from '../../infrastructure/common/components/input/select-common';
+import InputPasswordCommon from '../../infrastructure/common/components/input/input-password';
 
 const AddMemberManagement = () => {
     const [validate, setValidate] = useState({});
@@ -53,8 +54,9 @@ const AddMemberManagement = () => {
         if (isValidData()) {
             await memberService.addMember({
                 name: dataMember.name,
+                username: dataMember.username,
                 email: dataMember.email,
-                password: dataEmployee.password,
+                password: dataMember.password,
                 sex: dataMember.sex,
                 role: dataMember.role,
                 cccd: dataMember.cccd,
@@ -113,6 +115,19 @@ const AddMemberManagement = () => {
                                         submittedTime={submittedTime}
                                     />
                                 </Col> */}
+                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                    <InputTextCommon
+                                        label={"Tên đăng nhập"}
+                                        attribute={"username"}
+                                        isRequired={true}
+                                        dataAttribute={dataMember.username}
+                                        setData={setDataMember}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                    />
+                                </Col>
                                 <Col xs={24} sm={24} md={24} lg={12} xl={12}>
                                     <InputTextCommon
                                         label={"Email"}
