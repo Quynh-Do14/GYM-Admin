@@ -76,6 +76,7 @@ const ViewMemberManagement = () => {
                 name: detailMember.name,
                 email: detailMember.user?.email,
                 sex: detailMember.sex,
+                address: detailMember.address,
                 cccd: detailMember.cccd,
                 phone: detailMember.phone,
                 sdt: detailMember.sdt,
@@ -92,6 +93,7 @@ const ViewMemberManagement = () => {
                     name: dataMember.name,
                     email: dataMember.email,
                     sex: dataMember.sex,
+                    address: dataMember.address,
                     role: dataMember.role,
                     cccd: dataMember.cccd,
                     phone: dataMember.phone,
@@ -152,7 +154,7 @@ const ViewMemberManagement = () => {
                                     <InputTextCommon
                                         label={"Email"}
                                         attribute={"email"}
-                                        isRequired={true}
+                                        isRequired={false}
                                         dataAttribute={dataMember.email}
                                         setData={setDataMember}
                                         disabled={true}
@@ -167,6 +169,20 @@ const ViewMemberManagement = () => {
                                         attribute={"sex"}
                                         isRequired={true}
                                         dataAttribute={dataMember.sex}
+                                        setData={setDataMember}
+                                        disabled={false}
+                                        validate={validate}
+                                        setValidate={setValidate}
+                                        submittedTime={submittedTime}
+                                        listDataOfItem={Constants.Gender.List}
+                                    />
+                                </Col>
+                                <Col xs={24} sm={24} md={24} lg={12} xl={12}>
+                                    <InputTextCommon
+                                        label={"Địa chỉ"}
+                                        attribute={"address"}
+                                        isRequired={false}
+                                        dataAttribute={dataMember.address}
                                         setData={setDataMember}
                                         disabled={false}
                                         validate={validate}

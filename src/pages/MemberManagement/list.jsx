@@ -155,7 +155,14 @@ const ListMemberManagement = () => {
                             />
                         }
                         key={"name"}
-                        dataIndex={"name"}
+                        dataIndex={"user"}
+                        render={(value, record) => {
+                            return (
+                                <div>
+                                    {value?.name}
+                                </div>
+                            )
+                        }}
                     />
                     <Column
                         title={

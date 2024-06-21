@@ -54,7 +54,7 @@ export class Endpoint {
         static Get = "/members"
         static Add = "/members/admin/add"
         static AddUser = "/members/admin/add"
-        static Update = "/members/update"
+        static Update = "/members/admin/update"
         static Delete = "/members/delete"
     }
     static Packages = class {
